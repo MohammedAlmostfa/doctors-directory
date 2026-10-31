@@ -1,0 +1,29 @@
+<div class="container-page py-6 pb-28 md:pb-12 flex flex-col gap-6">
+  @if (details(); as d) {
+    <app-breadcrumb [items]="crumbs()" [backLink]="listPath()" backLabel="العودة إلى نتائج البحث" />
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div class="lg:col-span-8 flex flex-col gap-6">
+        <app-listing-identity [details]="d" [status]="status()" />
+
+        @if (d.about || d.chips?.length) {
+          <app-listing-about [title]="d.aboutTitle" [about]="d.about ?? ''" [chips]="d.chips ?? []" />
+        }
+
+        <app-listing-address [noun]="d.noun" [fullAddress]="fullAddress()" [area]="d.area" [city]="d.city" [mapUrl]="mapUrl()" />
+      </div>
+
+      <aside class="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
+        <app-contact-card [noun]="d.noun" [phone]="d.phone" [mobile]="d.mobile" [whatsapp]="d.whatsapp" [email]="d.email" />
+        <app-weekly-hours [schedule]="d.schedule" [todayDow]="todayDow()" />
+      </aside>
+    </div>
+
+    <app-mobile-call-bar [noun]="d.noun" [phone]="d.phone" [mapUrl]="mapUrl()" />
+  } @else {
+    <app-empty-state icon="search_off" title="لم نعثر على الصفحة المطلوبة" hint="ربما الرابط غير صحيح أو تم حذف الصفحة." />
+    <a [routerLink]="listPath()" class="link-more self-center">
+      <span class="icon text-[18px]" aria-hidden="true">arrow_forward</span>العودة إلى {{ listLabel() }}
+    </a>
+  }
+</div>

@@ -1,0 +1,33 @@
+<footer class="bg-brand-deep text-white py-14">
+  <div class="container-page">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-7 h-7 rounded-md bg-brand-soft text-brand-deep flex items-center justify-center">
+            <span class="icon text-[18px]">add</span>
+          </span>
+          <span class="font-heading text-xl font-bold">دليلك الطبي</span>
+        </div>
+        <p class="text-sm text-white/80 max-w-sm">دليل للتعريف بالأطباء والعيادات في مختلف المحافظات السورية.</p>
+      </div>
+
+      <nav class="md:col-span-3 flex flex-col gap-2.5 text-sm text-white/80" aria-label="روابط التذييل">
+        @for (l of links; track l.path) {
+          <a [routerLink]="l.path" class="hover:text-white">{{ l.label }}</a>
+        }
+      </nav>
+
+      <div class="md:col-span-3 md:flex md:justify-end">
+        <a href="mailto:contact@doctors-directory.example" class="flex items-center gap-2 text-sm text-white/80 hover:text-white">
+          <span class="icon text-[18px]">mail</span>
+          <bdi dir="ltr">contact@doctors-directory.example</bdi>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-white/15 mt-8 pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/70">
+      <p>المعلومات المعروضة للتعريف فقط ولا تُغني عن استشارة الطبيب المختص.</p>
+      <p>© {{ year }} دليلك الطبي</p>
+    </div>
+  </div>
+</footer>

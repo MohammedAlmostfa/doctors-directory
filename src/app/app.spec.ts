@@ -1,24 +1,23 @@
-import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { describe, expect, it } from 'vitest';
+import { LabsService } from './core/services/labs.service';
 
-describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    })
-      .compileComponents();
+describe('LabsService', () => {
+  it('should load lab records', () => {
+    const service = new LabsService();
+    expect(service.getAll().length).toBeGreaterThan(0);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+  it('should include the expected fields for a lab item', () => {
+    const service = new LabsService();
+    const firstLab = service.getAll()[0];
 
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, doctors-directory');
+    expect(firstLab).toMatchObject({
+      id: expect.any(Number),
+      name: expect.any(String),
+      city: expect.any(String),
+      area: expect.any(String),
+      homeVisit: expect.any(Boolean),
+      ranges: expect.any(Array),
+    });
   });
 });

@@ -1,0 +1,31 @@
+<app-page-hero
+  title="المراكز الطبية"
+  subtitle="ابحث عن مشفى أو مركز طبي أو مجمع عيادات في مدينتك، واطّلع على تخصصاته وساعات دوامه." />
+
+<section class="py-8 md:py-10">
+  <div class="container-page flex flex-col gap-6">
+    <app-directory-filters
+      [(filters)]="filters"
+      label="تصفية المراكز الطبية"
+      placeholder="اسم المركز أو المنطقة أو التخصص"
+      [categorySelect]="typeSelect" />
+
+    <p class="text-sm text-subtle">
+      <b class="font-semibold text-ink">{{ results().length }} مركز</b>
+      · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
+    </p>
+
+    @if (results().length) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (c of results(); track c.id) {
+        <app-place-card [place]="c" icon="local_hospital" [tag]="c.type" [detailsLink]="'/centers/' + c.id">
+            <!-- هاد المحتوى بيطلع مكان <ng-content /> داخل الكارد -->
+            <app-specialty-chips [items]="c.specialties" />
+          </app-place-card>
+        }
+      </div>
+    } @else {
+      <app-empty-state title="لا توجد مراكز مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+    }
+  </div>
+</section>

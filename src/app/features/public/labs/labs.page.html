@@ -1,0 +1,29 @@
+<app-page-hero
+  title="المخابر"
+  subtitle="ابحث عن مخبر تحاليل في مدينتك، واعرف إن كان مفتوحاً الآن وهل يوفّر سحب العينات من المنزل." />
+
+<section class="py-8 md:py-10">
+  <div class="container-page flex flex-col gap-6">
+    <app-directory-filters
+      [(filters)]="filters"
+      label="تصفية المخابر"
+      placeholder="اسم المخبر أو المنطقة"
+      flagLabel="سحب منزلي" />
+
+    <p class="text-sm text-subtle">
+      <b class="font-semibold text-ink">{{ results().length }} مخبر</b>
+      · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
+    </p>
+
+    @if (results().length) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (lab of results(); track lab.id) {
+  <app-place-card [place]="lab" icon="biotech" [tag]="lab.homeVisit ? 'سحب منزلي' : ''" [detailsLink]="'/labs/' + lab.id" />
+
+        }
+      </div>
+    } @else {
+      <app-empty-state title="لا توجد مخابر مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+    }
+  </div>
+</section>

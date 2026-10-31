@@ -1,0 +1,65 @@
+<app-home-hero />
+
+<!-- 1) الخدمات -->
+<section class="py-14 md:py-20">
+  <div class="container-page">
+    <app-section-heading title="خدماتنا" subtitle="كل ما تحتاجه من معلومات طبية في مكان واحد." />
+    <app-service-cards [items]="services" />
+  </div>
+</section>
+
+<!-- 2) صيدليات مفتوحة الآن (تختفي إذا ما في ولا وحدة) -->
+@if (openPharmacies().length) {
+  <section class="pb-14 md:pb-20">
+    <div class="container-page">
+      <app-section-heading
+        title="صيدليات مفتوحة الآن"
+        subtitle="حسب التوقيت الحالي في دمشق."
+        linkPath="/pharmacies" linkLabel="كل الصيدليات" />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (p of openPharmacies(); track p.id) {
+          <app-place-card [place]="p" icon="local_pharmacy"
+                          [tag]="is24(p.ranges) ? '24 ساعة' : ''" [detailsLink]="'/pharmacies/' + p.id" />
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- 3) التخصصات -->
+<section class="pb-14 md:pb-20">
+  <div class="container-page">
+    <app-section-heading
+      title="تصفّح حسب التخصص"
+      subtitle="اختر التخصص لتصل مباشرة إلى الأطباء المتوفرين."
+      linkPath="/specialties" linkLabel="كل التخصصات" />
+    <div class="flex flex-wrap gap-3">
+      @for (s of specialties; track s) {
+        <a routerLink="/doctors" [queryParams]="{ specialty: s }" class="chip-lg">{{ s }}</a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 4) كيف يعمل -->
+<section class="py-14 md:py-20 bg-white border-y border-line">
+  <div class="container-page">
+    <app-section-heading title="كيف يعمل الدليل؟" subtitle="ثلاث خطوات بسيطة للوصول إلى ما تحتاجه." />
+    <app-how-it-works />
+  </div>
+</section>
+
+<!-- 5) لماذا دليلك الطبي -->
+<section class="py-14 md:py-20">
+  <div class="container-page">
+    <app-section-heading title="لماذا دليلك الطبي؟" />
+    <app-why-us />
+  </div>
+</section>
+
+<!-- 6) CTA -->
+<section class="pb-14 md:pb-20">
+  <div class="container-page">
+    <app-home-cta />
+  </div>
+</section>

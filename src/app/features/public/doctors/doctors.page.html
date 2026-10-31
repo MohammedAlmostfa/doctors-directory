@@ -1,0 +1,29 @@
+<app-page-hero
+  title="الأطباء"
+  subtitle="ابحث عن طبيب حسب الاسم أو التخصص أو المدينة، واطّلع على عنوان عيادته ورقم هاتفه." />
+
+<section class="py-8 md:py-10">
+  <div class="container-page flex flex-col gap-6">
+<app-directory-filters
+  [(filters)]="filters"
+  label="تصفية الأطباء"
+  placeholder="اسم الطبيب أو التخصص أو المنطقة"
+  [categorySelect]="specialtySelect"
+  [showOpenNow]="false" />
+
+    <p class="text-sm text-subtle">
+      <b class="font-semibold text-ink">{{ results().length }} طبيب</b>
+      · المعلومات للتعريف فقط، يُفضّل الاتصال بالعيادة قبل الزيارة.
+    </p>
+
+    @if (results().length) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (d of results(); track d.id) {
+          <app-doctor-card [doctor]="d" />
+        }
+      </div>
+    } @else {
+      <app-empty-state title="لا يوجد أطباء مطابقون" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+    }
+  </div>
+</section>

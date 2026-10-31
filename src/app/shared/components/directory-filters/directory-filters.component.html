@@ -1,0 +1,48 @@
+<form class="card p-4 flex flex-wrap items-center gap-3" role="search"
+      [attr.aria-label]="label()" (submit)="$event.preventDefault()">
+
+  <div class="relative flex-1 min-w-[220px]">
+    <span class="icon text-[20px] text-subtle absolute inset-y-0 start-3.5 flex items-center pointer-events-none" aria-hidden="true">search</span>
+    <input type="search" class="field-input field-input-icon" autocomplete="off"
+           [placeholder]="placeholder()" [attr.aria-label]="placeholder()"
+           [value]="filters().q" (input)="patch({ q: $any($event.target).value })">
+  </div>
+
+  <div class="relative w-full sm:w-48">
+    <select aria-label="المدينة" class="field-input appearance-none cursor-pointer pe-9"
+            [value]="filters().city" (change)="patch({ city: $any($event.target).value })">
+      <option value="">كل المدن</option>
+      @for (c of cities; track c) {
+        <option [value]="c" [selected]="filters().city === c">{{ c }}</option>
+      }
+    </select>
+    <span class="icon text-[18px] text-subtle absolute inset-y-0 end-3 flex items-center pointer-events-none" aria-hidden="true">expand_more</span>
+  </div>
+
+  @if (categorySelect(); as cat) {
+    <div class="relative w-full sm:w-48">
+      <select class="field-input appearance-none cursor-pointer pe-9" [attr.aria-label]="cat.label"
+              [value]="filters().category" (change)="patch({ category: $any($event.target).value })">
+        <option value="">{{ cat.allLabel }}</option>
+        @for (o of cat.options; track o) {
+          <option [value]="o" [selected]="filters().category === o">{{ o }}</option>
+        }
+      </select>
+      <span class="icon text-[18px] text-subtle absolute inset-y-0 end-3 flex items-center pointer-events-none" aria-hidden="true">expand_more</span>
+    </div>
+  }
+
+  @if (showOpenNow()) {
+    <label class="chip-lg !h-11 !px-4 cursor-pointer has-[:checked]:bg-brand-soft has-[:checked]:border-brand has-[:checked]:text-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand">
+      <input type="checkbox" class="sr-only" [checked]="filters().openNow"
+             (change)="patch({ openNow: $any($event.target).checked })">مفتوح الآن
+    </label>
+  }
+
+  @if (flagLabel(); as flag) {
+    <label class="chip-lg !h-11 !px-4 cursor-pointer has-[:checked]:bg-brand-soft has-[:checked]:border-brand has-[:checked]:text-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand">
+      <input type="checkbox" class="sr-only" [checked]="filters().flag"
+             (change)="patch({ flag: $any($event.target).checked })">{{ flag }}
+    </label>
+  }
+</form>

@@ -1,0 +1,35 @@
+<header class="sticky top-0 z-50 bg-white border-b border-line">
+  <div class="container-page h-[72px] flex items-center justify-between gap-6">
+    <a routerLink="/" class="flex items-center gap-2.5" aria-label="دليلك الطبي – الرئيسية">
+      <span class="w-8 h-8 rounded-md bg-brand text-white flex items-center justify-center">
+        <span class="icon text-[20px]">add</span>
+      </span>
+      <span class="font-heading text-2xl font-bold text-brand">دليلك الطبي</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-6" aria-label="التنقل الرئيسي">
+      @for (l of links; track l.path) {
+        <a [routerLink]="l.path" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: l.exact }" class="nav-link">{{ l.label }}</a>
+      }
+    </nav>
+
+    <button type="button" class="lg:hidden btn-outline !h-10 !px-2.5"
+            [attr.aria-expanded]="menuOpen()" aria-controls="mobile-nav"
+            aria-label="القائمة" (click)="toggle()">
+      <span class="icon">menu</span>
+    </button>
+  </div>
+
+  @if (menuOpen()) {
+    <nav id="mobile-nav" class="lg:hidden border-t border-line bg-white" aria-label="التنقل الرئيسي">
+      <div class="container-page py-3 flex flex-col gap-1">
+        @for (l of links; track l.path) {
+          <a [routerLink]="l.path" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: l.exact }" class="nav-link py-2"
+             (click)="close()">{{ l.label }}</a>
+        }
+      </div>
+    </nav>
+  }
+</header>
