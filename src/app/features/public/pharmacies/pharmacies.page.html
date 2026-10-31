@@ -10,20 +10,27 @@
       placeholder="اسم الصيدلية أو المنطقة"
       flagLabel="24 ساعة" />
 
-    <p class="text-sm text-subtle">
-      <b class="font-semibold text-ink">{{ results().length }} صيدلية</b>
-      · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
-    </p>
-
-    @if (results().length) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (p of results(); track p.id) {
-<app-place-card [place]="p" icon="local_pharmacy" [tag]="is24(p.ranges) ? '24 ساعة' : ''" [detailsLink]="'/pharmacies/' + p.id" />
-
-        }
-      </div>
+    @if (loading()) {
+      <!-- بديل سطر العدد (text-sm = 20px) حتى لا يتحرك شيء عند ظهوره -->
+      <div class="flex h-5 items-center"><span class="skeleton-bar h-3.5 w-52"></span></div>
+      <app-skeleton-cards [count]="6" />
     } @else {
-      <app-empty-state title="لا توجد صيدليات مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      <p class="text-sm text-subtle">
+        <b class="font-semibold text-ink">{{ results().length }} صيدلية</b>
+        · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
+      </p>
+
+      @if (results().length) {
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (p of results(); track p.id) {
+            <app-place-card [place]="p" icon="local_pharmacy"
+                            [tag]="is24(p.ranges) ? '24 ساعة' : ''"
+                            [detailsLink]="'/pharmacies/' + p.id" />
+          }
+        </div>
+      } @else {
+        <app-empty-state title="لا توجد صيدليات مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      }
     }
   </div>
 </section>

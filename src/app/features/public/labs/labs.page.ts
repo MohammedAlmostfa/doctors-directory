@@ -11,6 +11,8 @@ import { PageHeroComponent } from '../../../shared/components/page-hero/page-her
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getOpeningStatus } from '../../../shared/utils/working-hours';
+import { simulateLoading } from '../../../core/utils/simulate-loading';
+import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 @Component({
   selector: 'app-labs-page',
@@ -20,6 +22,7 @@ import { getOpeningStatus } from '../../../shared/utils/working-hours';
     DirectoryFiltersComponent,
     PlaceCardComponent,
     EmptyStateComponent,
+        SkeletonCardsComponent,
   ],
   templateUrl: './labs.page.html',
 })
@@ -27,7 +30,7 @@ export class LabsPage implements OnInit {
   private readonly service = inject(LabsService);
   private readonly clock = inject(ClockService);
   private readonly all = this.service.getAll();
-
+loading = simulateLoading();
   readonly city = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
 

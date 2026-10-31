@@ -11,6 +11,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
+import { simulateLoading } from '../../../core/utils/simulate-loading';
+import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 @Component({
   selector: 'app-doctors-page',
@@ -20,13 +22,14 @@ import { DoctorCardComponent } from './components/doctor-card/doctor-card.compon
     DirectoryFiltersComponent,
     DoctorCardComponent,
     EmptyStateComponent,
+    SkeletonCardsComponent,
   ],
   templateUrl: './doctors.page.html',
 })
 export class DoctorsPage implements OnInit {
   private readonly service = inject(DoctorsService);
   private readonly all = this.service.getAll();
-
+loading = simulateLoading();
   readonly city = input<string>();
   readonly specialty = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });

@@ -10,22 +10,28 @@
       placeholder="اسم المركز أو المنطقة أو التخصص"
       [categorySelect]="typeSelect" />
 
-    <p class="text-sm text-subtle">
-      <b class="font-semibold text-ink">{{ results().length }} مركز</b>
-      · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
-    </p>
-
-    @if (results().length) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (c of results(); track c.id) {
-        <app-place-card [place]="c" icon="local_hospital" [tag]="c.type" [detailsLink]="'/centers/' + c.id">
-            <!-- هاد المحتوى بيطلع مكان <ng-content /> داخل الكارد -->
-            <app-specialty-chips [items]="c.specialties" />
-          </app-place-card>
-        }
-      </div>
+    @if (loading()) {
+      <!-- بديل سطر العدد (text-sm = 20px) حتى لا يتحرك شيء عند ظهوره -->
+      <div class="flex h-5 items-center"><span class="skeleton-bar h-3.5 w-52"></span></div>
+      <app-skeleton-cards [count]="6" [chips]="true" />
     } @else {
-      <app-empty-state title="لا توجد مراكز مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      <p class="text-sm text-subtle">
+        <b class="font-semibold text-ink">{{ results().length }} مركز</b>
+        · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
+      </p>
+
+      @if (results().length) {
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (c of results(); track c.id) {
+            <app-place-card [place]="c" icon="local_hospital" [tag]="c.type"
+                            [detailsLink]="'/centers/' + c.id">
+              <app-specialty-chips [items]="c.specialties" />
+            </app-place-card>
+          }
+        </div>
+      } @else {
+        <app-empty-state title="لا توجد مراكز مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      }
     }
   </div>
 </section>

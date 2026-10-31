@@ -14,6 +14,10 @@ import { PlaceCardComponent } from '../../../shared/components/place-card/place-
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getOpeningStatus } from '../../../shared/utils/working-hours';
 import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
+import { simulateLoading } from '../../../core/utils/simulate-loading';
+import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
+
+
 
 @Component({
   selector: 'app-centers-page',
@@ -24,6 +28,7 @@ import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-
     PlaceCardComponent,
     SpecialtyChipsComponent,
     EmptyStateComponent,
+    SkeletonCardsComponent,
   ],
   templateUrl: './centers.page.html',
 })
@@ -31,7 +36,7 @@ export class CentersPage implements OnInit {
   private readonly service = inject(CentersService);
   private readonly clock = inject(ClockService);
   private readonly all = this.service.getAll();
-
+loading = simulateLoading();
   readonly city = input<string>();
   readonly type = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });

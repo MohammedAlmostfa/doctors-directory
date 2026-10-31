@@ -110,5 +110,56 @@
   .nav-link.active {
     @apply font-bold text-brand border-b-2 border-brand;
   }
+
+
+/* ================= Skeleton loading ================= */
+
+  /* العناصر الرمادية الوهمية (نصوص، صور، أزرار) */
+  .skeleton-bar { @apply bg-line rounded-md; }
+
+  /* نفس .card تماماً (border + radius)، و overflow-hidden ليبقى اللمعان داخل الحواف المدورة */
+  .skeleton-card { @apply card relative overflow-hidden; }
+
+  /* طبقة الإضاءة: تغطي البطاقة وتتحرك فوقها */
+  .skeleton-card::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 100%;
+    pointer-events: none;
+    /* 155deg = شريط مائل قليلاً (قطري) يتحرك نحو الأسفل.
+       للحصول على ميلان أكبر جرّب 135deg */
+    background: linear-gradient(
+      155deg,
+      transparent 32%,
+      theme('colors.brand.soft / 50%') 43%,
+      rgb(255 255 255 / 0.9) 50%,
+      theme('colors.brand.soft / 50%') 57%,
+      transparent 68%
+    );
+    transform: translateY(-130%);               /* البداية: خارج البطاقة من الأعلى */
+    animation: skeleton-sweep 2.4s ease-in-out infinite;
+    animation-delay: var(--sweep-delay, 0s);    /* تأخير بسيط بين البطاقات لإحساس الموجة */
+    will-change: transform;
+  }
+
+  /* ظهور البطاقات الحقيقية بعد التحميل */
+  .reveal { animation: reveal 0.4s ease-out both; }
 }
 
+@keyframes skeleton-sweep {
+  0%        { transform: translateY(-130%); }
+  70%, 100% { transform: translateY(130%); }   /* آخر 30% وقفة قصيرة قبل الدورة التالية */
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* احترام إعداد "تقليل الحركة" في نظام التشغيل */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-card::after { animation: none; display: none; }
+  .reveal { animation: none; }
+}
