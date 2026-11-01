@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Doctor } from '../models/doctor.model';
-import { sixDays } from '../utils/schedule';
+import { sixDays } from '../../shared/utils/schedule';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorsService {

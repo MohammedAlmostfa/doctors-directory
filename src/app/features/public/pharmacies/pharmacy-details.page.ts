@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { Pharmacy } from '../../../core/models/pharmacy.model';
 import { PharmaciesService } from '../../../core/services/pharmacies.service';
-import { everyDay } from '../../../core/utils/schedule';
+import { everyDay } from '../../../shared/utils/schedule';
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
 import { is24Hours } from '../../../shared/utils/working-hours';

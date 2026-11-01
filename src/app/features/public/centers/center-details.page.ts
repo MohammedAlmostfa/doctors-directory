@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MedicalCenter } from '../../../core/models/center.model';
 import { CentersService } from '../../../core/services/centers.service';
-import { everyDay } from '../../../core/utils/schedule';
+import { everyDay } from '../../../shared/utils/schedule';
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
 

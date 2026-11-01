@@ -14,7 +14,6 @@ export class SiteHeaderComponent {
   readonly links = [
     { path: '/', label: 'الرئيسية', exact: true },
     { path: '/doctors', label: 'الأطباء', exact: false },
-    { path: '/specialties', label: 'التخصصات', exact: false },
     { path: '/pharmacies', label: 'الصيدليات', exact: false },
     { path: '/centers', label: 'المراكز الطبية', exact: false },
     { path: '/labs', label: 'المخابر', exact: false },

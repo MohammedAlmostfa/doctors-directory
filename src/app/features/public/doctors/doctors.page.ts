@@ -11,7 +11,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
-import { simulateLoading } from '../../../core/utils/simulate-loading';
+import { simulateLoading } from '../../../shared/utils/simulate-loading';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 @Component({

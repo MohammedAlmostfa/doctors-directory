@@ -12,7 +12,6 @@ export class SiteFooterComponent {
   readonly links = [
     { path: '/', label: 'الرئيسية' },
     { path: '/doctors', label: 'الأطباء' },
-    { path: '/specialties', label: 'التخصصات' },
     { path: '/pharmacies', label: 'الصيدليات' },
     { path: '/centers', label: 'المراكز الطبية' },
     { path: '/labs', label: 'المخابر' },

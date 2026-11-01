@@ -15,7 +15,7 @@ export class DoctorCardComponent {
   doctor = input.required<Doctor>();
 
   // 'د. أحمد الخطيب' → 'أخ' (نشيل "د." ونآخد أول حرف من أول كلمتين)
- initials = computed(() => initialsOf(this.doctor().name));
+ initials = computed(() =>'');
 
   telHref = computed(() => 'tel:' + this.doctor().phone.replace(/\s/g, ''));
 }

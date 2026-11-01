@@ -1,4 +1,4 @@
-import { WeeklySchedule } from '../constants/week-days';
+import { WeeklySchedule } from '../../core/constants/week-days';
 
 /** نفس الدوام كل أيام الأسبوع (نستخدمها لتحويل ranges الأماكن) */
 export const everyDay = (ranges: string[]): WeeklySchedule => ({
