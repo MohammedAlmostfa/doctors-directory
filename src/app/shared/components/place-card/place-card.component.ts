@@ -26,7 +26,10 @@ detailsLink = input<string | null>(null);   // مثلاً '/labs/3'
   hoursText = computed(() =>
     is24Hours(this.place().ranges) ? 'على مدار الساعة' : this.place().ranges.map(formatRange).join(' ، ')
   );
-  telHref = computed(() => 'tel:' + this.place().phone.replace(/\s/g, ''));
+  telHref = computed(() => {
+    const phone = this.place().phone;
+    return phone ? 'tel:' + phone.replace(/\s/g, '') : null;
+  });
   mapHref = computed(() => {
     const p = this.place();
     return 'https://www.google.com/maps/search/?api=1&query=' +

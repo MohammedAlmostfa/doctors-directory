@@ -1,3 +1,5 @@
+import { WorkingHoursDto } from '../../core/dto/working-hours.dto';
+
 export interface OpeningStatus {
   open: boolean;
   note: string;
@@ -84,4 +86,45 @@ if (current) {
     }
   }
   return { open: false, note: '' };
+}
+/** تحويل الدقائق إلى HH:mm */
+export function formatTime(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  return `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
+}
+
+/** تحويل ساعات العمل القادمة من API إلى WeeklySchedule */
+export function mapWorkingHours(
+  workingHours: WorkingHoursDto[],
+): WeeklySchedule {
+  const schedule: WeeklySchedule = {
+    sat: [],
+    sun: [],
+    mon: [],
+    tue: [],
+    wed: [],
+    thu: [],
+    fri: [],
+  };
+
+  for (const item of workingHours) {
+    const day = WEEK_DAYS.find(({ dow }) => dow === item.day_of_week);
+
+    if (!day) continue;
+
+    schedule[day.key].push(
+      `${formatTime(item.start_minute)}-${formatTime(item.end_minute)}`,
+    );
+  }
+
+  return schedule;
+}
+export function isWeekly24Hours(schedule: WeeklySchedule): boolean {
+  return WEEK_DAYS.every(day => {
+    const ranges = schedule[day.key];
+
+    return ranges.length === 1 && ranges[0] === '00:00-24:00';
+  });
 }

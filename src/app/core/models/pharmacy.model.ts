@@ -1,7 +1,9 @@
 import { PlaceBase } from './place.model';
+import { WeeklySchedule } from '../constants/week-days';
 
-// الصيدلية ما عندها حقول زيادة حالياً، فهي نفس PlaceBase
-export type Pharmacy = PlaceBase;
+export interface Pharmacy extends PlaceBase {
+  schedule: WeeklySchedule;
+}
 
 export interface PharmacyFilters {
   q: string;

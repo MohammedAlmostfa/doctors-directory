@@ -12,6 +12,7 @@ export interface Doctor extends ListingExtras {
   address: string | null;
   mapUrl: string | null;
 
+
   // بيانات التواصل
   phone: string | null;
 
