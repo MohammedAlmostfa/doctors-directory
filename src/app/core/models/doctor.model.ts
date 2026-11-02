@@ -1,21 +1,31 @@
-import { Specialty } from '../constants/specialties';
-import { WeeklySchedule } from '../constants/week-days';
 import { ListingExtras } from './listing-extras.model';
+import { WeeklySchedule } from '../constants/week-days';
+
 
 export interface Doctor extends ListingExtras {
   id: number;
-  name: string;               // 'د. ليلى الحلبي'
-  specialty: Specialty;
+  name: string;
+
+  // بيانات الموقع
   city: string;
   area: string;
-  address: string;
-  phone: string;              // هاتف العيادة
-  experienceYears: number;
-  schedule: WeeklySchedule;
-  interests?: string[];       // خاص بالأطباء
+  address: string | null;
+  mapUrl: string | null;
+
+  // بيانات التواصل
+  phone: string | null;
+
+  // بيانات الطبيب
+  specialty: string;
+  experienceYears: number | null;
+  profileImage: string | null;
+
+schedule?: WeeklySchedule;
+  interests?: string[];
 }
+
 export interface DoctorFilters {
   q: string;
   city: string;
-  specialty: Specialty | '';   // '' = كل التخصصات
+  specialty: string;
 }

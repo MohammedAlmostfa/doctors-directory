@@ -99,13 +99,15 @@
     <div class="flex items-center gap-2 border-t border-line pt-4">
 
       <!-- Call -->
-      <a
-        [href]="telHref()"
-        class="btn-outline flex min-h-11 flex-1 items-center justify-center gap-2"
-      >
-        <span class="icon text-lg" aria-hidden="true">call</span>
-        <span>اتصال</span>
-      </a>
+      @if (telHref(); as href) {
+        <a
+          [href]="href"
+          class="btn-outline flex min-h-11 flex-1 items-center justify-center gap-2"
+        >
+          <span class="icon text-lg" aria-hidden="true">call</span>
+          <span>اتصال</span>
+        </a>
+      }
 
       <!-- Profile -->
       <a

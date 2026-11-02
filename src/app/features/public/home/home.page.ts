@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SPECIALTIES } from '../../../core/constants/specialties';
 import { CentersService } from '../../../core/services/centers.service';
@@ -24,7 +24,7 @@ import { WhyUsComponent } from './components/why-us/why-us.component';
   ],
   templateUrl: './home.page.html',
 })
-export class HomePage {
+export class HomePage implements OnInit {
   private clock = inject(ClockService);
   private doctors = inject(DoctorsService);
   private pharmacies = inject(PharmaciesService);
@@ -35,11 +35,11 @@ export class HomePage {
   readonly is24 = is24Hours;
 
   // الأعداد من الخدمات نفسها: لما توصل الـ API بتصير حقيقية بدون تعديل بالقالب
-  readonly services: ServiceItem[] = [
+  readonly services = computed<ServiceItem[]>(() => [
     {
       icon: 'stethoscope', title: 'الأطباء', path: '/doctors',
       description: 'ابحث بين الأطباء حسب التخصص والمدينة، واطّلع على عنوان العيادة وساعات الدوام.',
-      count: `${this.doctors.getAll().length} طبيب`,
+      count: `${this.doctors.doctors().length} طبيب`,
     },
     {
       icon: 'local_pharmacy', title: 'الصيدليات', path: '/pharmacies',
@@ -56,7 +56,11 @@ export class HomePage {
       description: 'مخابر تحاليل قريبة منك، مع معرفة توفر خدمة سحب العينات من المنزل.',
       count: `${this.labs.getAll().length} مخبر`,
     },
-  ];
+  ]);
+
+  ngOnInit(): void {
+    this.doctors.load();
+  }
 
   // أول 3 صيدليات مفتوحة. بتتحدّث لحالها كل دقيقة لأنها تعتمد على الـ Signal تبع الساعة
   openPharmacies = computed(() => {

@@ -3,8 +3,6 @@ import { RouterLink } from '@angular/router';
 import { Doctor } from '../../../../../core/models/doctor.model';
 import { initialsOf } from '../../../../../shared/utils/initials';
 
-// داخل الـ class:
-
 @Component({
   selector: 'app-doctor-card',
   standalone: true,
@@ -14,8 +12,10 @@ import { initialsOf } from '../../../../../shared/utils/initials';
 export class DoctorCardComponent {
   doctor = input.required<Doctor>();
 
-  // 'د. أحمد الخطيب' → 'أخ' (نشيل "د." ونآخد أول حرف من أول كلمتين)
- initials = computed(() =>'');
+  initials = computed(() => initialsOf(this.doctor().name));
 
-  telHref = computed(() => 'tel:' + this.doctor().phone.replace(/\s/g, ''));
+  telHref = computed(() => {
+    const phone = this.doctor().phone;
+    return phone ? 'tel:' + phone.replace(/\s/g, '') : null;
+  });
 }

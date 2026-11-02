@@ -1,18 +1,21 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+
 import { SPECIALTIES } from '../../../core/constants/specialties';
 import { DoctorsService } from '../../../core/services/doctors.service';
+
 import {
   DirectoryFilters,
   DirectoryFiltersComponent,
   EMPTY_FILTERS,
   FilterSelect,
 } from '../../../shared/components/directory-filters/directory-filters.component';
+
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
-import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
-import { simulateLoading } from '../../../shared/utils/simulate-loading';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
+import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
+
+import { matchesQuery } from '../../../shared/utils/arabic-search';
 
 @Component({
   selector: 'app-doctors-page',
@@ -28,10 +31,14 @@ import { SkeletonCardsComponent } from '../../../shared/components/skeleton-card
 })
 export class DoctorsPage implements OnInit {
   private readonly service = inject(DoctorsService);
-  private readonly all = this.service.getAll();
-loading = simulateLoading();
+
+  readonly loading = this.service.loading;
+  readonly error = this.service.error;
+  readonly doctors = this.service.doctors;
+
   readonly city = input<string>();
   readonly specialty = input<string>();
+
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
 
   readonly specialtySelect: FilterSelect = {
@@ -43,7 +50,7 @@ loading = simulateLoading();
   readonly results = computed(() => {
     const { q, city, category } = this.filters();
 
-    return this.all.filter(doctor =>
+    return this.doctors().filter(doctor =>
       matchesQuery(q, doctor.name, doctor.specialty, doctor.area) &&
       (!city || doctor.city === city) &&
       (!category || doctor.specialty === category)
@@ -56,5 +63,11 @@ loading = simulateLoading();
       city: this.city() ?? '',
       category: this.specialty() ?? '',
     });
+
+    this.service.load();
+  }
+
+  retry(): void {
+    this.service.retry();
   }
 }
