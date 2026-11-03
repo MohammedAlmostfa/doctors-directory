@@ -11,7 +11,7 @@ export function mapDoctor(dto: DoctorApiDto): Doctor {
 
     specialty: dto.specialty.name,
 
-    city: dto.area.governorate.name,
+    governorate: dto.area.governorate?.name ?? '',
     area: dto.area.name,
 
     address: dto.address,
@@ -24,7 +24,7 @@ export function mapDoctor(dto: DoctorApiDto): Doctor {
     experienceYears: dto.experience_years,
     about: dto.about,
     profileImage: dto.profile_image,
-    schedule: mapWorkingHours(dto.workingHours ?? []),
+    workingHours: mapWorkingHours(dto.workingHours ?? []),
   };
 }
 

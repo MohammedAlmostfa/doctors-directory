@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SPECIALTIES } from '../../../core/constants/specialties';
-import { CentersService } from '../../../core/services/centers.service';
+import { CentersService } from '../../../core/services/medical-centers.service';
 import { ClockService } from '../../../core/services/clock.service';
 import { DoctorsService } from '../../../core/services/doctors.service';
 import { LabsService } from '../../../core/services/labs.service';

@@ -47,21 +47,21 @@ export class PharmaciesPage implements OnInit {
   readonly error = this.service.error;
   readonly loaded = this.service.loaded;
 
-  readonly city = input<string>();
+  readonly governorate = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
 
   readonly results = computed(() => {
-    const { q, city, openNow, flag } = this.filters();
+    const { q, governorate, openNow, flag } = this.filters();
     const now = this.clock.minutes();
     const day = new Date().getDay();
 
     return this.pharmacies().filter(pharmacy => {
       const matchesFilters =
         matchesQuery(q, pharmacy.name, pharmacy.area) &&
-        (!city || pharmacy.city === city);
+        (!governorate || pharmacy.governorate === governorate);
 
       const openingStatus = getWeeklyStatus(
-        pharmacy.schedule,
+        pharmacy.workingHours,
         day,
         now,
       );
@@ -69,7 +69,7 @@ export class PharmaciesPage implements OnInit {
       return (
         matchesFilters &&
         (!openNow || openingStatus.open) &&
-        (!flag || isWeekly24Hours(pharmacy.schedule))
+        (!flag || isWeekly24Hours(pharmacy.workingHours))
       );
     });
   });
@@ -81,7 +81,7 @@ export class PharmaciesPage implements OnInit {
   ngOnInit(): void {
     this.filters.set({
       ...EMPTY_FILTERS,
-      city: this.city() ?? '',
+      governorate: this.governorate() ?? '',
     });
 
     this.service.load();

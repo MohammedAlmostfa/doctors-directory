@@ -1,4 +1,4 @@
-export const CITIES = [
+export const GOVERNORATES = [
   'دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة',
   'اللاذقية', 'طرطوس', 'درعا', 'السويداء', 'دير الزور',
 ] as const;

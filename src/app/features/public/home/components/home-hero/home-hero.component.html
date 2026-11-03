@@ -28,10 +28,10 @@
       </div>
 
       <div class="relative md:w-48">
-        <select aria-label="المدينة" class="field-input !h-12 appearance-none cursor-pointer pe-9"
-                [value]="city()" (change)="city.set($any($event.target).value)">
-          <option value="">كل المدن</option>
-          @for (c of cities; track c) {
+        <select aria-label="المحافظة" class="field-input !h-12 appearance-none cursor-pointer pe-9"
+                [value]="governorate()" (change)="governorate.set($any($event.target).value)">
+          <option value="">كل المحافظات</option>
+          @for (c of governorates; track c) {
             <option [value]="c">{{ c }}</option>
           }
         </select>

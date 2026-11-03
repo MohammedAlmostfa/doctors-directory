@@ -24,7 +24,7 @@
         <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           @for (p of results(); track p.id) {
             <app-place-card [place]="p" icon="local_pharmacy"
-                            [tag]="is24(p.schedule) ? '24 ساعة' : ''"
+                            [tag]="is24(p.workingHours) ? '24 ساعة' : ''"
                             [detailsLink]="'/pharmacies/' + p.id" />
           }
         </div>

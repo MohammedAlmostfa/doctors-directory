@@ -1,23 +1,25 @@
 import { Component, OnInit, computed, inject, signal, input } from '@angular/core';
+
 import { CENTER_TYPES } from '../../../core/constants/center-types';
-import { CentersService } from '../../../core/services/centers.service';
+import { CentersService } from '../../../core/services/medical-centers.service';
 import { ClockService } from '../../../core/services/clock.service';
+
 import {
   DirectoryFilters,
   DirectoryFiltersComponent,
   EMPTY_FILTERS,
   FilterSelect,
 } from '../../../shared/components/directory-filters/directory-filters.component';
+
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
-import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { getOpeningStatus } from '../../../shared/utils/working-hours';
-import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
-import { simulateLoading } from '../../../shared/utils/simulate-loading';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
+import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
 
-
+import { matchesQuery } from '../../../shared/utils/arabic-search';
+import { everyDay } from '../../../shared/utils/schedule';
+import { getWeeklyStatus } from '../../../shared/utils/working-hours';
 
 @Component({
   selector: 'app-centers-page',
@@ -35,10 +37,15 @@ import { SkeletonCardsComponent } from '../../../shared/components/skeleton-card
 export class CentersPage implements OnInit {
   private readonly service = inject(CentersService);
   private readonly clock = inject(ClockService);
-  private readonly all = this.service.getAll();
-loading = simulateLoading();
-  readonly city = input<string>();
+
+  readonly centers = this.service.centers;
+  readonly loading = this.service.loading;
+  readonly loaded = this.service.loaded;
+  readonly error = this.service.error;
+
+  readonly governorate = input<string>();
   readonly type = input<string>();
+
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
 
   readonly typeSelect: FilterSelect = {
@@ -48,22 +55,30 @@ loading = simulateLoading();
   };
 
   readonly results = computed(() => {
-    const { q, city, category, openNow } = this.filters();
-    const now = this.clock.minutes();
+    const { q, governorate, category, openNow } = this.filters();
 
-    return this.all.filter(center =>
+    const now = this.clock.minutes();
+    const today = new Date().getDay();
+
+    return this.centers().filter(center =>
       matchesQuery(q, center.name, center.area, ...center.specialties) &&
-      (!city || center.city === city) &&
+      (!governorate || center.governorate === governorate) &&
       (!category || center.type === category) &&
-      (!openNow || getOpeningStatus(center.ranges, now).open)
+      (!openNow || getWeeklyStatus(center.workingHours ?? everyDay([]), today, now).open)
     );
   });
 
   ngOnInit(): void {
     this.filters.set({
       ...EMPTY_FILTERS,
-      city: this.city() ?? '',
+      governorate: this.governorate() ?? '',
       category: this.type() ?? '',
     });
+
+    this.service.load();
+  }
+
+  retry(): void {
+    this.service.retry();
   }
 }

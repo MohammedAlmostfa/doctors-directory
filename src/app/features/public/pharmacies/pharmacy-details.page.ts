@@ -12,19 +12,19 @@ import { isWeekly24Hours } from '../../../shared/utils/working-hours';
 const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
   name: pharmacy.name,
   icon: 'local_pharmacy',
-  badges: isWeekly24Hours(pharmacy.schedule) ? ['24 ساعة'] : [],
+  badges: isWeekly24Hours(pharmacy.workingHours) ? ['24 ساعة'] : [],
 
   location: {
-    label: `${pharmacy.city} – ${pharmacy.area}`,
+    label: `${pharmacy.governorate} – ${pharmacy.area}`,
     path: '/pharmacies',
-    query: { city: pharmacy.city },
+    query: { governorate: pharmacy.governorate },
   },
 
   aboutTitle: 'نبذة عن الصيدلية',
   about: pharmacy.about ?? undefined,
   noun: 'الصيدلية',
 
-  city: pharmacy.city,
+  governorate: pharmacy.governorate,
   area: pharmacy.area,
   address: pharmacy.address ?? '',
   phone: pharmacy.phone ?? '',
@@ -32,7 +32,7 @@ const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
   whatsapp: pharmacy.whatsapp ?? undefined,
   email: pharmacy.email ?? undefined,
 
-  schedule: pharmacy.schedule,
+  workingHours: pharmacy.workingHours,
 });
 
 @Component({

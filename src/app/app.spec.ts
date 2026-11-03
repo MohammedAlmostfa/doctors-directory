@@ -14,7 +14,7 @@ describe('LabsService', () => {
     expect(firstLab).toMatchObject({
       id: expect.any(Number),
       name: expect.any(String),
-      city: expect.any(String),
+      governorate: expect.any(String),
       area: expect.any(String),
       homeVisit: expect.any(Boolean),
       ranges: expect.any(Array),

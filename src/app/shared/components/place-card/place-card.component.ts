@@ -33,6 +33,6 @@ detailsLink = input<string | null>(null);   // مثلاً '/labs/3'
   mapHref = computed(() => {
     const p = this.place();
     return 'https://www.google.com/maps/search/?api=1&query=' +
-      encodeURIComponent(`${p.name} ${p.city} ${p.area}`);
+      encodeURIComponent(`${p.name} ${p.governorate} ${p.area}`);
   });
 }

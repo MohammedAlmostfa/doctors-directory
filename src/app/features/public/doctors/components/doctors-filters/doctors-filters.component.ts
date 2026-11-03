@@ -1,5 +1,5 @@
 import { Component, model } from '@angular/core';
-import { CITIES } from '../../../../../core/constants/cities';
+import { GOVERNORATES } from '../../../../../core/constants/governorates';
 import { SPECIALTIES } from '../../../../../core/constants/specialties';
 import { DoctorFilters } from '../../../../../core/models/doctor.model';
 
@@ -10,7 +10,7 @@ import { DoctorFilters } from '../../../../../core/models/doctor.model';
 })
 export class DoctorsFiltersComponent {
   filters = model.required<DoctorFilters>();
-  readonly cities = CITIES;
+  readonly governorates = GOVERNORATES;
   readonly specialties = SPECIALTIES;
 
   patch(changes: Partial<DoctorFilters>) {

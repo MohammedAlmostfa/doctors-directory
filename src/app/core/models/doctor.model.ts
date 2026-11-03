@@ -1,17 +1,16 @@
-import { ListingExtras } from './listing-extras.model';
+
 import { WeeklySchedule } from '../constants/week-days';
 
 
-export interface Doctor extends ListingExtras {
+export interface Doctor   {
   id: number;
   name: string;
 
   // بيانات الموقع
-  city: string;
+  governorate: string;
   area: string;
   address: string | null;
   mapUrl: string | null;
-
 
   // بيانات التواصل
   phone: string | null;
@@ -20,13 +19,17 @@ export interface Doctor extends ListingExtras {
   specialty: string;
   experienceYears: number | null;
   profileImage: string | null;
-
-schedule?: WeeklySchedule;
+  workingHours?: WeeklySchedule;
   interests?: string[];
+
+    about?: string | null;
+  mobile?: string | null;
+  whatsapp?: string | null;
+  email?: string | null;
 }
 
 export interface DoctorFilters {
   q: string;
-  city: string;
+  governorate: string;
   specialty: string;
 }

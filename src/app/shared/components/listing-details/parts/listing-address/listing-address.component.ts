@@ -12,7 +12,7 @@ import { Component, input } from '@angular/core';
         <span class="icon text-[24px] text-brand mt-0.5" aria-hidden="true">location_city</span>
         <div class="flex-1">
           <address class="not-italic font-medium leading-8">{{ fullAddress() }}</address>
-          <p class="mt-1 text-sm text-subtle">المنطقة: {{ area() }} <span aria-hidden="true">•</span> المحافظة: {{ city() }}</p>
+          <p class="mt-1 text-sm text-subtle">المنطقة: {{ area() }} <span aria-hidden="true">•</span> المحافظة: {{ governorate() }}</p>
         </div>
       </div>
       <a [href]="mapUrl()" target="_blank" rel="noopener" class="btn-outline mt-4">
@@ -25,6 +25,6 @@ export class ListingAddressComponent {
   noun = input.required<string>();
   fullAddress = input.required<string>();
   area = input.required<string>();
-  city = input.required<string>();
+  governorate = input.required<string>();
   mapUrl = input.required<string>();
 }

@@ -24,9 +24,9 @@ const toDetails = (doctor: Doctor): ListingDetails => ({
   },
 
   location: {
-    label: `${doctor.city} – ${doctor.area}`,
+    label: `${doctor.governorate} – ${doctor.area}`,
     path: '/doctors',
-    query: { city: doctor.city },
+    query: { governorate: doctor.governorate },
   },
 
   aboutTitle: 'نبذة عن الطبيب',
@@ -34,7 +34,7 @@ const toDetails = (doctor: Doctor): ListingDetails => ({
   chips: doctor.interests,
 
   noun: 'العيادة',
-  city: doctor.city,
+  governorate: doctor.governorate,
   area: doctor.area,
   address: doctor.address ?? '',
 
@@ -43,7 +43,7 @@ const toDetails = (doctor: Doctor): ListingDetails => ({
   whatsapp: doctor.whatsapp ?? undefined,
   email: doctor.email ?? undefined,
 
-  schedule: doctor.schedule ?? everyDay([]),
+  workingHours: doctor.workingHours ?? everyDay([]),
 });
 
 @Component({

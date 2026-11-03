@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CITIES } from '../../../../../core/constants/cities';
+import { GOVERNORATES } from '../../../../../core/constants/governorates';
 import { SPECIALTIES } from '../../../../../core/constants/specialties';
 
 @Component({
@@ -12,16 +12,16 @@ import { SPECIALTIES } from '../../../../../core/constants/specialties';
 export class HomeHeroComponent {
   private router = inject(Router);
 
-  readonly cities = CITIES;
+  readonly governorates = GOVERNORATES;
   readonly quick = SPECIALTIES.slice(0, 5);   // اختصارات سريعة تحت البحث
 
   q = signal('');
-  city = signal('');
+  governorate = signal('');
 
   search() {
     // null = الراوتر بيشيل الـ param من الرابط بدل ما يكتب ?q= فاضي
     this.router.navigate(['/doctors'], {
-      queryParams: { q: this.q().trim() || null, city: this.city() || null },
+      queryParams: { q: this.q().trim() || null, governorate: this.governorate() || null },
     });
   }
 }

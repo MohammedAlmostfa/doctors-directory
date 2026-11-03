@@ -1,17 +1,17 @@
 import { Component, input, model } from '@angular/core';
-import { CITIES } from '../../../core/constants/cities';
+import { GOVERNORATES } from '../../../core/constants/governorates';
 
 /** شكل الفلتر المشترك لكل صفحات الدليل */
 export interface DirectoryFilters {
   q: string;
-  city: string;
+  governorate: string;
   category: string;    // نوع المركز / تخصص الطبيب ('' = الكل)
   openNow: boolean;
   flag: boolean;       // سحب منزلي (مخابر) / 24 ساعة (صيدليات)
 }
 
 export const EMPTY_FILTERS: DirectoryFilters = {
-  q: '', city: '', category: '', openNow: false, flag: false,
+  q: '', governorate: '', category: '', openNow: false, flag: false,
 };
 
 /** وصف القائمة المنسدلة الإضافية */
@@ -35,7 +35,7 @@ export class DirectoryFiltersComponent {
   showOpenNow = input(true);
   flagLabel = input<string | null>(null);              // null = لا تعرض الشيب
 
-  readonly cities = CITIES;
+  readonly governorates = GOVERNORATES;
 
   patch(changes: Partial<DirectoryFilters>) {
     this.filters.update(f => ({ ...f, ...changes }));

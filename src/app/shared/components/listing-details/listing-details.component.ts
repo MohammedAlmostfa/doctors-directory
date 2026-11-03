@@ -34,12 +34,12 @@ export class ListingDetailsComponent {
   status = computed(() => {
     const d = this.details();
     const { dow, minutes } = this.clock.now();
-    return d ? getWeeklyStatus(d.schedule, dow, minutes) : { open: false, note: '' };
+    return d ? getWeeklyStatus(d.workingHours, dow, minutes) : { open: false, note: '' };
   });
 
   fullAddress = computed(() => {
     const d = this.details();
-    return d ? `${d.city} – ${d.area}، ${d.address}` : '';
+    return d ? `${d.governorate} – ${d.area}، ${d.address}` : '';
   });
   mapUrl = computed(() => mapHref(this.fullAddress()));
 

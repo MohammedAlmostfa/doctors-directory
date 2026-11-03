@@ -14,7 +14,7 @@ export interface ListingDetails {
   initials?: string;
   subtitle?: ListingLink;      // التخصص / نوع المركز
   badges?: string[];           // سحب منزلي / 24 ساعة
-  location: ListingLink;       // 'دمشق – المزة' (يفتح القائمة مفلترة بالمدينة)
+  location: ListingLink;       // 'دمشق – المزة' (يفتح القائمة مفلترة بالمحافظة)
 
   // المحتوى
   aboutTitle: string;
@@ -23,7 +23,7 @@ export interface ListingDetails {
   noun: string;                // العيادة / المخبر / الصيدلية / المركز
 
   // العنوان والتواصل
-  city: string;
+  governorate: string;
   area: string;
   address: string;
   phone: string;
@@ -31,5 +31,5 @@ export interface ListingDetails {
   whatsapp?: string;
   email?: string;
 
-  schedule: WeeklySchedule;
+  workingHours: WeeklySchedule;
 }

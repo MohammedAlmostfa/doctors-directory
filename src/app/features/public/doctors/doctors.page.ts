@@ -36,7 +36,7 @@ export class DoctorsPage implements OnInit {
   readonly error = this.service.error;
   readonly doctors = this.service.doctors;
 
-  readonly city = input<string>();
+  readonly governorate = input<string>();
   readonly specialty = input<string>();
 
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
@@ -48,11 +48,11 @@ export class DoctorsPage implements OnInit {
   };
 
   readonly results = computed(() => {
-    const { q, city, category } = this.filters();
+    const { q, governorate, category } = this.filters();
 
     return this.doctors().filter(doctor =>
       matchesQuery(q, doctor.name, doctor.specialty, doctor.area) &&
-      (!city || doctor.city === city) &&
+      (!governorate || doctor.governorate === governorate) &&
       (!category || doctor.specialty === category)
     );
   });
@@ -60,7 +60,7 @@ export class DoctorsPage implements OnInit {
   ngOnInit(): void {
     this.filters.set({
       ...EMPTY_FILTERS,
-      city: this.city() ?? '',
+      governorate: this.governorate() ?? '',
       category: this.specialty() ?? '',
     });
 

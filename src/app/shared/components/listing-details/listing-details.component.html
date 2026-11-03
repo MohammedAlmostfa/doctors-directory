@@ -10,12 +10,12 @@
           <app-listing-about [title]="d.aboutTitle" [about]="d.about ?? ''" [chips]="d.chips ?? []" />
         }
 
-        <app-listing-address [noun]="d.noun" [fullAddress]="fullAddress()" [area]="d.area" [city]="d.city" [mapUrl]="mapUrl()" />
+        <app-listing-address [noun]="d.noun" [fullAddress]="fullAddress()" [area]="d.area" [governorate]="d.governorate" [mapUrl]="mapUrl()" />
       </div>
 
       <aside class="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
         <app-contact-card [noun]="d.noun" [phone]="d.phone" [mobile]="d.mobile" [whatsapp]="d.whatsapp" [email]="d.email" />
-        <app-weekly-hours [schedule]="d.schedule" [todayDow]="todayDow()" />
+        <app-weekly-hours [schedule]="d.workingHours" [todayDow]="todayDow()" />
       </aside>
     </div>
 

@@ -9,11 +9,11 @@
   </div>
 
   <div class="relative w-full sm:w-48">
-    <select aria-label="المدينة" class="field-input appearance-none cursor-pointer pe-9"
-            [value]="filters().city" (change)="patch({ city: $any($event.target).value })">
-      <option value="">كل المدن</option>
-      @for (c of cities; track c) {
-        <option [value]="c" [selected]="filters().city === c">{{ c }}</option>
+    <select aria-label="المحافظة" class="field-input appearance-none cursor-pointer pe-9"
+            [value]="filters().governorate" (change)="patch({ governorate: $any($event.target).value })">
+      <option value="">كل المحافظات</option>
+      @for (governorate of governorates; track governorate) {
+        <option [value]="governorate" [selected]="filters().governorate === governorate">{{ governorate }}</option>
       }
     </select>
     <span class="icon text-[18px] text-subtle absolute inset-y-0 end-3 flex items-center pointer-events-none" aria-hidden="true">expand_more</span>
