@@ -19,7 +19,7 @@ export interface Doctor   {
   specialty: string;
   experienceYears: number | null;
   profileImage: string | null;
-  workingHours?: WeeklySchedule;
+  workingHours: WeeklySchedule;
   interests?: string[];
 
     about?: string | null;

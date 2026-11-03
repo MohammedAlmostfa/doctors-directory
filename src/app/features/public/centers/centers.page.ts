@@ -18,7 +18,6 @@ import { SkeletonCardsComponent } from '../../../shared/components/skeleton-card
 import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { everyDay } from '../../../shared/utils/schedule';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
 
 @Component({
@@ -57,14 +56,13 @@ export class CentersPage implements OnInit {
   readonly results = computed(() => {
     const { q, governorate, category, openNow } = this.filters();
 
-    const now = this.clock.minutes();
-    const today = new Date().getDay();
+    const { dow, minutes } = this.clock.now();
 
     return this.centers().filter(center =>
       matchesQuery(q, center.name, center.area, ...center.specialties) &&
       (!governorate || center.governorate === governorate) &&
       (!category || center.type === category) &&
-      (!openNow || getWeeklyStatus(center.workingHours ?? everyDay([]), today, now).open)
+      (!openNow || getWeeklyStatus(center.workingHours, dow, minutes).open)
     );
   });
 

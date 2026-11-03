@@ -5,12 +5,12 @@
     <span class="icon text-[20px] text-subtle absolute inset-y-0 start-3.5 flex items-center pointer-events-none" aria-hidden="true">search</span>
     <input type="search" class="field-input field-input-icon" autocomplete="off"
            [placeholder]="placeholder()" [attr.aria-label]="placeholder()"
-           [value]="filters().q" (input)="patch({ q: $any($event.target).value })">
+           [value]="filters().q" (input)="updateText('q', $event)">
   </div>
 
   <div class="relative w-full sm:w-48">
     <select aria-label="المحافظة" class="field-input appearance-none cursor-pointer pe-9"
-            [value]="filters().governorate" (change)="patch({ governorate: $any($event.target).value })">
+            [value]="filters().governorate" (change)="updateText('governorate', $event)">
       <option value="">كل المحافظات</option>
       @for (governorate of governorates; track governorate) {
         <option [value]="governorate" [selected]="filters().governorate === governorate">{{ governorate }}</option>
@@ -22,7 +22,7 @@
   @if (categorySelect(); as cat) {
     <div class="relative w-full sm:w-48">
       <select class="field-input appearance-none cursor-pointer pe-9" [attr.aria-label]="cat.label"
-              [value]="filters().category" (change)="patch({ category: $any($event.target).value })">
+              [value]="filters().category" (change)="updateText('category', $event)">
         <option value="">{{ cat.allLabel }}</option>
         @for (o of cat.options; track o) {
           <option [value]="o" [selected]="filters().category === o">{{ o }}</option>
@@ -35,14 +35,14 @@
   @if (showOpenNow()) {
     <label class="chip-lg !h-11 !px-4 cursor-pointer has-[:checked]:bg-brand-soft has-[:checked]:border-brand has-[:checked]:text-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand">
       <input type="checkbox" class="sr-only" [checked]="filters().openNow"
-             (change)="patch({ openNow: $any($event.target).checked })">مفتوح الآن
+             (change)="updateChecked('openNow', $event)">مفتوح الآن
     </label>
   }
 
   @if (flagLabel(); as flag) {
     <label class="chip-lg !h-11 !px-4 cursor-pointer has-[:checked]:bg-brand-soft has-[:checked]:border-brand has-[:checked]:text-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand">
       <input type="checkbox" class="sr-only" [checked]="filters().flag"
-             (change)="patch({ flag: $any($event.target).checked })">{{ flag }}
+             (change)="updateChecked('flag', $event)">{{ flag }}
     </label>
   }
 </form>

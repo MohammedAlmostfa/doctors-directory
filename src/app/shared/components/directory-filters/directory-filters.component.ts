@@ -40,4 +40,41 @@ export class DirectoryFiltersComponent {
   patch(changes: Partial<DirectoryFilters>) {
     this.filters.update(f => ({ ...f, ...changes }));
   }
+
+  updateText(
+    field: 'q' | 'governorate' | 'category',
+    event: Event,
+  ): void {
+    const target = event.target;
+
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) {
+      return;
+    }
+
+    switch (field) {
+      case 'q':
+        this.patch({ q: target.value });
+        break;
+      case 'governorate':
+        this.patch({ governorate: target.value });
+        break;
+      case 'category':
+        this.patch({ category: target.value });
+        break;
+    }
+  }
+
+  updateChecked(field: 'openNow' | 'flag', event: Event): void {
+    const target = event.target;
+
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+
+    if (field === 'openNow') {
+      this.patch({ openNow: target.checked });
+    } else {
+      this.patch({ flag: target.checked });
+    }
+  }
 }

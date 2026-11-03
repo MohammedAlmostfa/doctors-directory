@@ -7,7 +7,7 @@ export function mapMedicalCenter(dto: MedicalCenterApiDto): MedicalCenter {
   return {
     id: dto.id,
     name: dto.name,
-    type: dto.type as CenterType,
+    type: dto.type,
     governorate: dto.area.governorate?.name ?? '',
     area: dto.area.name,
     address: dto.address,
@@ -17,7 +17,6 @@ export function mapMedicalCenter(dto: MedicalCenterApiDto): MedicalCenter {
     about: dto.about,
     mapUrl: dto.map_url,
     specialties: dto.specialties.map(specialty => specialty.name),
-    ranges: [],
     workingHours: mapWorkingHours(dto.workingHours ?? []),
   };
 }

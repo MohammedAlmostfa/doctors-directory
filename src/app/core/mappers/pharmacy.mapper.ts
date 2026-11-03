@@ -18,7 +18,6 @@ export function mapPharmacy(dto: PharmacyApiDto): Pharmacy {
     mobile: dto.mobile,
     whatsapp: dto.whatsapp,
     about: dto.about,
-    ranges: [],
     workingHours,
   };
 }

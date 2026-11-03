@@ -15,7 +15,6 @@ export function mapLaboratory(dto: LaboratoryApiDto): Lab {
     about: dto.description,
     mapUrl: dto.map_url,
     homeVisit: dto.home_visit,
-    ranges: [],
     workingHours: mapWorkingHours(dto.workingHours ?? []),
   };
 }

@@ -19,7 +19,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (p of openPharmacies(); track p.id) {
           <app-place-card [place]="p" icon="local_pharmacy"
-                          [tag]="is24(p.ranges) ? '24 ساعة' : ''" [detailsLink]="'/pharmacies/' + p.id" />
+                          [tag]="is24(p.workingHours) ? '24 ساعة' : ''" [detailsLink]="'/pharmacies/' + p.id" />
         }
       </div>
     </div>
@@ -32,7 +32,7 @@
     <app-section-heading
       title="تصفّح حسب التخصص"
       subtitle="اختر التخصص لتصل مباشرة إلى الأطباء المتوفرين."
-      linkPath="/specialties" linkLabel="كل التخصصات" />
+      linkPath="/doctors" linkLabel="كل التخصصات" />
     <div class="flex flex-wrap gap-3">
       @for (s of specialties; track s) {
         <a routerLink="/doctors" [queryParams]="{ specialty: s }" class="chip-lg">{{ s }}</a>

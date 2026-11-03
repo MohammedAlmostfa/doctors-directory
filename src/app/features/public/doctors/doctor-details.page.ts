@@ -3,7 +3,6 @@ import { Component, OnInit, computed, inject, input } from '@angular/core';
 
 import { Doctor } from '../../../core/models/doctor.model';
 import { DoctorsService } from '../../../core/services/doctors.service';
-import { everyDay } from '../../../shared/utils/schedule';
 
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
@@ -43,7 +42,7 @@ const toDetails = (doctor: Doctor): ListingDetails => ({
   whatsapp: doctor.whatsapp ?? undefined,
   email: doctor.email ?? undefined,
 
-  workingHours: doctor.workingHours ?? everyDay([]),
+  workingHours: doctor.workingHours,
 });
 
 @Component({

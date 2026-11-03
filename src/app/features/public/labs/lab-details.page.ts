@@ -6,7 +6,6 @@ import { LabsService } from '../../../core/services/labs.service';
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
-import { everyDay } from '../../../shared/utils/schedule';
 
 const toDetails = (lab: Lab): ListingDetails => ({
   name: lab.name,
@@ -33,7 +32,7 @@ const toDetails = (lab: Lab): ListingDetails => ({
   whatsapp: lab.whatsapp ?? undefined,
   email: lab.email ?? undefined,
 
-  workingHours: lab.workingHours ?? everyDay([]),
+  workingHours: lab.workingHours,
 });
 
 @Component({

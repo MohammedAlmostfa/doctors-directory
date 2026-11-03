@@ -6,7 +6,6 @@ import { CentersService } from '../../../core/services/medical-centers.service';
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
-import { everyDay } from '../../../shared/utils/schedule';
 
 const toDetails = (center: MedicalCenter): ListingDetails => ({
   name: center.name,
@@ -37,7 +36,7 @@ const toDetails = (center: MedicalCenter): ListingDetails => ({
   whatsapp: center.whatsapp ?? undefined,
   email: center.email ?? undefined,
 
-  workingHours: center.workingHours ?? everyDay([]),
+  workingHours: center.workingHours,
 });
 
 @Component({

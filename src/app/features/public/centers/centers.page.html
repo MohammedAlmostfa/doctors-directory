@@ -14,6 +14,9 @@
       <!-- بديل سطر العدد (text-sm = 20px) حتى لا يتحرك شيء عند ظهوره -->
       <div class="flex h-5 items-center"><span class="skeleton-bar h-3.5 w-52"></span></div>
       <app-skeleton-cards [count]="6" [chips]="true" />
+    } @else if (error()) {
+      <app-empty-state title="تعذر تحميل المراكز الطبية" hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
+      <button type="button" class="btn-outline self-center" (click)="retry()">إعادة المحاولة</button>
     } @else {
       <p class="text-sm text-subtle">
         <b class="font-semibold text-ink">{{ results().length }} مركز</b>

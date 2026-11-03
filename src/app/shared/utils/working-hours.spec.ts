@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { formatRange, getOpeningStatus } from './working-hours';
+import {
+  formatRange,
+  getOpeningStatus,
+  getWeeklyStatus,
+  isWeekly24Hours,
+} from './working-hours';
+import { WeeklySchedule } from '../../core/constants/week-days';
 
 describe('working-hours', () => {
   it('formats hours correctly for AM/PM', () => {
@@ -27,6 +33,36 @@ describe('working-hours', () => {
     expect(status.note).toBe('');
   });
 
+  it('uses the requested weekday when calculating weekly status', () => {
+    const schedule: WeeklySchedule = {
+      sat: ['08:00-16:00'],
+      sun: [],
+      mon: [],
+      tue: [],
+      wed: [],
+      thu: [],
+      fri: [],
+    };
 
+    expect(getWeeklyStatus(schedule, 6, 9 * 60)).toMatchObject({
+      open: true,
+      note: 'حتى 4:00 م',
+    });
+    expect(getWeeklyStatus(schedule, 0, 9 * 60).open).toBe(false);
+  });
 
+  it('only considers a schedule 24-hour when every day is full-day', () => {
+    const schedule: WeeklySchedule = {
+      sat: ['00:00-24:00'],
+      sun: ['00:00-24:00'],
+      mon: ['00:00-24:00'],
+      tue: ['00:00-24:00'],
+      wed: ['00:00-24:00'],
+      thu: ['00:00-24:00'],
+      fri: ['00:00-24:00'],
+    };
+
+    expect(isWeekly24Hours(schedule)).toBe(true);
+    expect(isWeekly24Hours({ ...schedule, fri: [] })).toBe(false);
+  });
 });

@@ -18,6 +18,20 @@ export class HomeHeroComponent {
   q = signal('');
   governorate = signal('');
 
+  updateQuery(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLInputElement) {
+      this.q.set(target.value);
+    }
+  }
+
+  updateGovernorate(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLSelectElement) {
+      this.governorate.set(target.value);
+    }
+  }
+
   search() {
     // null = الراوتر بيشيل الـ param من الرابط بدل ما يكتب ?q= فاضي
     this.router.navigate(['/doctors'], {

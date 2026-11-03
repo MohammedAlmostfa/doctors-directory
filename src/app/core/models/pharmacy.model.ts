@@ -1,19 +1,8 @@
 
-import { WeeklySchedule } from '../constants/week-days';
+import { PlaceBase } from './place.model';
 
-export interface Pharmacy   {
-  workingHours: WeeklySchedule;
-
-    id: number;
-  name: string;
-  governorate: string;
-  area: string;
-  address: string | null;
-  phone: string | null;
-  mapUrl?: string | null;
-  ranges: string[];
-
-    about?: string | null;
+export interface Pharmacy extends PlaceBase {
+  about?: string | null;
   mobile?: string | null;
   whatsapp?: string | null;
   email?: string | null;

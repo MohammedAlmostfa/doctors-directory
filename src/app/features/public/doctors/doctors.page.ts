@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, input, signal } from '@angular/core';
 
 import { SPECIALTIES } from '../../../core/constants/specialties';
 import { DoctorsService } from '../../../core/services/doctors.service';
@@ -37,6 +37,7 @@ export class DoctorsPage implements OnInit {
   readonly doctors = this.service.doctors;
 
   readonly governorate = input<string>();
+  readonly q = input<string>();
   readonly specialty = input<string>();
 
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
@@ -57,13 +58,17 @@ export class DoctorsPage implements OnInit {
     );
   });
 
-  ngOnInit(): void {
-    this.filters.set({
-      ...EMPTY_FILTERS,
-      governorate: this.governorate() ?? '',
-      category: this.specialty() ?? '',
-    });
+  constructor() {
+    effect(() => {
+      const q = this.q() ?? '';
+      const governorate = this.governorate() ?? '';
+      const category = this.specialty() ?? '';
 
+      this.filters.update(filters => ({ ...filters, q, governorate, category }));
+    });
+  }
+
+  ngOnInit(): void {
     this.service.load();
   }
 

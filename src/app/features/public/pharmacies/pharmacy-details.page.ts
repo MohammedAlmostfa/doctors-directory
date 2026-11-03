@@ -44,7 +44,7 @@ const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
   ],
   template: `
     @if (loading()) {
-      <app-skeleton-cards [count]="1" variant="doctor" />
+      <app-skeleton-cards [count]="1" variant="place" />
     } @else if (error()) {
       <div class="text-center py-10">
         <p>{{ error() }}</p>

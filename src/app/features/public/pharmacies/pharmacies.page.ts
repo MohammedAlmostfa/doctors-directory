@@ -2,7 +2,7 @@ import { Component, OnInit, computed, inject, input, signal } from '@angular/cor
 
 import { PharmaciesService } from '../../../core/services/pharmacies.service';
 import { ClockService } from '../../../core/services/clock.service';
-import { WeeklySchedule, WEEK_DAYS } from '../../../core/constants/week-days';
+import { WeeklySchedule } from '../../../core/constants/week-days';
 
 import {
   DirectoryFilters,
@@ -16,15 +16,7 @@ import { PlaceCardComponent } from '../../../shared/components/place-card/place-
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { getWeeklyStatus } from '../../../shared/utils/working-hours';
-
-function isWeekly24Hours(schedule: WeeklySchedule): boolean {
-  return WEEK_DAYS.every(day => {
-    const ranges = schedule[day.key];
-
-    return ranges.length === 1 && ranges[0] === '00:00-24:00';
-  });
-}
+import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-hours';
 
 @Component({
   selector: 'app-pharmacies-page',
@@ -52,8 +44,7 @@ export class PharmaciesPage implements OnInit {
 
   readonly results = computed(() => {
     const { q, governorate, openNow, flag } = this.filters();
-    const now = this.clock.minutes();
-    const day = new Date().getDay();
+    const { dow, minutes } = this.clock.now();
 
     return this.pharmacies().filter(pharmacy => {
       const matchesFilters =
@@ -62,8 +53,8 @@ export class PharmaciesPage implements OnInit {
 
       const openingStatus = getWeeklyStatus(
         pharmacy.workingHours,
-        day,
-        now,
+        dow,
+        minutes,
       );
 
       return (

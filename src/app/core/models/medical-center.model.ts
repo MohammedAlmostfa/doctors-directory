@@ -1,19 +1,10 @@
 import { CenterType } from '../constants/center-types';
+import { PlaceBase } from './place.model';
 
-export interface MedicalCenter   {
-  type: CenterType;
+export interface MedicalCenter extends PlaceBase {
+  type: string;
   specialties: string[];
-    id: number;
-  name: string;
-  governorate: string;
-  area: string;
-  address: string | null;
-  phone: string | null;
-  mapUrl?: string | null;
-  ranges: string[];
-
-
-    about?: string | null;
+  about?: string | null;
   mobile?: string | null;
   whatsapp?: string | null;
   email?: string | null;

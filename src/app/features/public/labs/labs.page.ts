@@ -15,7 +15,6 @@ import { PlaceCardComponent } from '../../../shared/components/place-card/place-
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { everyDay } from '../../../shared/utils/schedule';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
 
 @Component({
@@ -45,13 +44,12 @@ export class LabsPage implements OnInit {
   readonly results = computed(() => {
     const { q, governorate, openNow, flag } = this.filters();
 
-    const now = this.clock.minutes();
-    const today = new Date().getDay();
+    const { dow, minutes } = this.clock.now();
 
     return this.labs().filter(lab =>
       matchesQuery(q, lab.name, lab.area) &&
       (!governorate || lab.governorate === governorate) &&
-      (!openNow || getWeeklyStatus(lab.workingHours ?? everyDay([]), today, now).open) &&
+      (!openNow || getWeeklyStatus(lab.workingHours, dow, minutes).open) &&
       (!flag || lab.homeVisit)
     );
   });
