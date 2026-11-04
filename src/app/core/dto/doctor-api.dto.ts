@@ -1,6 +1,7 @@
 import { SpecialtyDto } from './specialty.dto';
 import { AreaDto } from './area.dto';
 import { WorkingHoursDto } from './working-hours.dto';
+import { PaginatedResponseDto } from './pagination.dto';
 export interface DoctorApiDto {
   id: number;
   name: string;
@@ -19,6 +20,6 @@ export interface DoctorApiDto {
   workingHours: WorkingHoursDto[];
 }
 
-export interface DoctorsApiResponse {
-  data: DoctorApiDto[];
-}
+
+export type DoctorsApiResponse =
+  PaginatedResponseDto<DoctorApiDto>;

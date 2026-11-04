@@ -1,3 +1,4 @@
+
 import { Component, OnInit, computed, inject, signal, input } from '@angular/core';
 
 import { CENTER_TYPES } from '../../../core/constants/center-types';
@@ -17,6 +18,8 @@ import { PlaceCardComponent } from '../../../shared/components/place-card/place-
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
 
+import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
+
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
 
@@ -30,6 +33,7 @@ import { getWeeklyStatus } from '../../../shared/utils/working-hours';
     SpecialtyChipsComponent,
     EmptyStateComponent,
     SkeletonCardsComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './centers.page.html',
 })
@@ -38,9 +42,16 @@ export class CentersPage implements OnInit {
   private readonly clock = inject(ClockService);
 
   readonly centers = this.service.centers;
+
   readonly loading = this.service.loading;
+  readonly loadingMore = this.service.loadingMore;
+
   readonly loaded = this.service.loaded;
+
   readonly error = this.service.error;
+  readonly loadMoreError = this.service.loadMoreError;
+
+  readonly hasMore = this.service.hasMore;
 
   readonly governorate = input<string>();
   readonly type = input<string>();
@@ -55,7 +66,6 @@ export class CentersPage implements OnInit {
 
   readonly results = computed(() => {
     const { q, governorate, category, openNow } = this.filters();
-
     const { dow, minutes } = this.clock.now();
 
     return this.centers().filter(center =>
@@ -74,6 +84,10 @@ export class CentersPage implements OnInit {
     });
 
     this.service.load();
+  }
+
+  loadMore(): void {
+    this.service.loadMore();
   }
 
   retry(): void {

@@ -1,3 +1,4 @@
+
 import { Component, OnInit, computed, effect, inject, input, signal } from '@angular/core';
 
 import { SPECIALTIES } from '../../../core/constants/specialties';
@@ -15,6 +16,7 @@ import { PageHeroComponent } from '../../../shared/components/page-hero/page-her
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
 
+import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 
 @Component({
@@ -26,6 +28,7 @@ import { matchesQuery } from '../../../shared/utils/arabic-search';
     DoctorCardComponent,
     EmptyStateComponent,
     SkeletonCardsComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './doctors.page.html',
 })
@@ -33,7 +36,13 @@ export class DoctorsPage implements OnInit {
   private readonly service = inject(DoctorsService);
 
   readonly loading = this.service.loading;
+  readonly loadingMore = this.service.loadingMore;
+
   readonly error = this.service.error;
+  readonly loadMoreError = this.service.loadMoreError;
+
+  readonly hasMore = this.service.hasMore;
+
   readonly doctors = this.service.doctors;
 
   readonly governorate = input<string>();
@@ -70,6 +79,10 @@ export class DoctorsPage implements OnInit {
 
   ngOnInit(): void {
     this.service.load();
+  }
+
+  loadMore(): void {
+    this.service.loadMore();
   }
 
   retry(): void {

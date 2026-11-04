@@ -1,3 +1,4 @@
+
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 
 import { LabsService } from '../../../core/services/labs.service';
@@ -14,6 +15,8 @@ import { PageHeroComponent } from '../../../shared/components/page-hero/page-her
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
+import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
+
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
 
@@ -26,6 +29,7 @@ import { getWeeklyStatus } from '../../../shared/utils/working-hours';
     PlaceCardComponent,
     EmptyStateComponent,
     SkeletonCardsComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './labs.page.html',
 })
@@ -34,16 +38,22 @@ export class LabsPage implements OnInit {
   private readonly clock = inject(ClockService);
 
   readonly labs = this.service.labs;
+
   readonly loading = this.service.loading;
+  readonly loadingMore = this.service.loadingMore;
+
   readonly loaded = this.service.loaded;
+
   readonly error = this.service.error;
+  readonly loadMoreError = this.service.loadMoreError;
+
+  readonly hasMore = this.service.hasMore;
 
   readonly governorate = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
 
   readonly results = computed(() => {
     const { q, governorate, openNow, flag } = this.filters();
-
     const { dow, minutes } = this.clock.now();
 
     return this.labs().filter(lab =>
@@ -61,6 +71,10 @@ export class LabsPage implements OnInit {
     });
 
     this.service.load();
+  }
+
+  loadMore(): void {
+    this.service.loadMore();
   }
 
   retry(): void {

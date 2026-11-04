@@ -1,3 +1,4 @@
+
 <app-page-hero
   title="المراكز الطبية"
   subtitle="ابحث عن مشفى أو مركز طبي أو مجمع عيادات في مدينتك، واطّلع على تخصصاته وساعات دوامه." />
@@ -11,12 +12,24 @@
       [categorySelect]="typeSelect" />
 
     @if (loading()) {
-      <!-- بديل سطر العدد (text-sm = 20px) حتى لا يتحرك شيء عند ظهوره -->
-      <div class="flex h-5 items-center"><span class="skeleton-bar h-3.5 w-52"></span></div>
+      <div class="flex h-5 items-center">
+        <span class="skeleton-bar h-3.5 w-52"></span>
+      </div>
+
       <app-skeleton-cards [count]="6" [chips]="true" />
+
     } @else if (error()) {
-      <app-empty-state title="تعذر تحميل المراكز الطبية" hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
-      <button type="button" class="btn-outline self-center" (click)="retry()">إعادة المحاولة</button>
+      <app-empty-state
+        title="تعذر تحميل المراكز الطبية"
+        hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
+
+      <button
+        type="button"
+        class="btn-outline self-center"
+        (click)="retry()">
+        إعادة المحاولة
+      </button>
+
     } @else {
       <p class="text-sm text-subtle">
         <b class="font-semibold text-ink">{{ results().length }} مركز</b>
@@ -26,14 +39,51 @@
       @if (results().length) {
         <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           @for (c of results(); track c.id) {
-            <app-place-card [place]="c" icon="local_hospital" [tag]="c.type"
-                            [detailsLink]="'/centers/' + c.id">
+            <app-place-card
+              [place]="c"
+              icon="local_hospital"
+              [tag]="c.type"
+              [detailsLink]="'/centers/' + c.id">
               <app-specialty-chips [items]="c.specialties" />
             </app-place-card>
           }
         </div>
       } @else {
-        <app-empty-state title="لا توجد مراكز مطابقة" hint="غيّر كلمات البحث أو ألغِ التصفية." />
+        <app-empty-state
+          title="لا توجد مراكز مطابقة"
+          hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      }
+
+      <!-- Skeleton للدفعات الإضافية -->
+      @if (loadingMore()) {
+        <app-skeleton-cards [count]="3" [chips]="true" />
+      }
+
+      <!-- خطأ تحميل دفعة إضافية -->
+      @if (loadMoreError()) {
+        <div class="flex flex-col items-center gap-3 py-4">
+          <p class="text-sm text-subtle">
+            {{ loadMoreError() }}
+          </p>
+
+          <button
+            type="button"
+            class="btn-outline self-center"
+            (click)="retry()">
+            إعادة المحاولة
+          </button>
+        </div>
+      }
+
+      <!-- مراقبة نهاية القائمة -->
+      @if (hasMore()) {
+        <div
+          appInfiniteScroll
+          [disabled]="loadingMore() || !!loadMoreError()"
+          (loadMore)="loadMore()"
+          class="h-2 w-full"
+          aria-hidden="true">
+        </div>
       }
     }
   </div>

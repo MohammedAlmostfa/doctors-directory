@@ -1,3 +1,4 @@
+
 <app-page-hero
   title="الأطباء"
   subtitle="ابحث عن طبيب حسب الاسم أو التخصص أو المدينة، واطّلع على عنوان عيادته ورقم هاتفه." />
@@ -12,7 +13,7 @@
       [showOpenNow]="false" />
 
     @if (loading()) {
-      <!-- Skeleton يحافظ على أبعاد المحتوى أثناء التحميل -->
+      <!-- التحميل الأولي -->
       <div class="flex h-5 items-center">
         <span class="skeleton-bar h-3.5 w-52"></span>
       </div>
@@ -20,6 +21,7 @@
       <app-skeleton-cards [count]="6" variant="doctor" />
 
     } @else if (error()) {
+      <!-- فشل تحميل الصفحة الأولى -->
       <app-empty-state
         title="تعذر تحميل الأطباء"
         hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
@@ -47,6 +49,38 @@
         <app-empty-state
           title="لا يوجد أطباء مطابقون"
           hint="غيّر كلمات البحث أو ألغِ التصفية." />
+      }
+
+      <!-- تحميل دفعة إضافية -->
+      @if (loadingMore()) {
+        <app-skeleton-cards [count]="3" variant="doctor" />
+      }
+
+      <!-- فشل تحميل الدفعة التالية -->
+      @if (loadMoreError()) {
+        <div class="flex flex-col items-center gap-3 py-4">
+          <p class="text-sm text-subtle">
+            {{ loadMoreError() }}
+          </p>
+
+          <button
+            type="button"
+            class="self-center"
+            (click)="retry()">
+            إعادة المحاولة
+          </button>
+        </div>
+      }
+
+      <!-- نقطة مراقبة الوصول إلى نهاية القائمة -->
+      @if (hasMore()) {
+        <div
+          appInfiniteScroll
+          [disabled]="loadingMore() || !!loadMoreError()"
+          (loadMore)="loadMore()"
+          class="h-2 w-full"
+          aria-hidden="true">
+        </div>
       }
     }
   </div>

@@ -1,3 +1,4 @@
+
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 
 import { PharmaciesService } from '../../../core/services/pharmacies.service';
@@ -15,6 +16,8 @@ import { PageHeroComponent } from '../../../shared/components/page-hero/page-her
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
+import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
+
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-hours';
 
@@ -27,6 +30,7 @@ import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-
     PlaceCardComponent,
     EmptyStateComponent,
     SkeletonCardsComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './pharmacies.page.html',
 })
@@ -35,9 +39,15 @@ export class PharmaciesPage implements OnInit {
   private readonly clock = inject(ClockService);
 
   readonly pharmacies = this.service.pharmacies;
+
   readonly loading = this.service.loading;
+  readonly loadingMore = this.service.loadingMore;
+
   readonly error = this.service.error;
+  readonly loadMoreError = this.service.loadMoreError;
+
   readonly loaded = this.service.loaded;
+  readonly hasMore = this.service.hasMore;
 
   readonly governorate = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
@@ -76,6 +86,10 @@ export class PharmaciesPage implements OnInit {
     });
 
     this.service.load();
+  }
+
+  loadMore(): void {
+    this.service.loadMore();
   }
 
   retry(): void {

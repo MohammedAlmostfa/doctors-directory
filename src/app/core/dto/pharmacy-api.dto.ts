@@ -1,5 +1,7 @@
+
 import { AreaDto } from './area.dto';
 import { WorkingHoursDto } from './working-hours.dto';
+import { PaginatedResponseDto } from './pagination.dto';
 
 export interface PharmacyApiDto {
   id: number;
@@ -16,6 +18,4 @@ export interface PharmacyApiDto {
   area: AreaDto;
 }
 
-export interface PharmaciesApiResponse {
-  data: PharmacyApiDto[];
-}
+export type PharmaciesApiResponse = PaginatedResponseDto<PharmacyApiDto>;

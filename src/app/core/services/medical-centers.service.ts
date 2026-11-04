@@ -1,5 +1,6 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { MedicalCenter } from '../models/medical-center.model';
 import { MedicalCentersApiResponse } from '../dto/medical-center-api.dto';
@@ -12,31 +13,89 @@ export class CentersService {
   private readonly endpoint = `${environment.apiUrl}/medical-centers`;
 
   private readonly _centers = signal<MedicalCenter[]>([]);
+
   private readonly _loading = signal(false);
+  private readonly _loadingMore = signal(false);
   private readonly _loaded = signal(false);
+
   private readonly _error = signal<string | null>(null);
+  private readonly _loadMoreError = signal<string | null>(null);
+
+  private readonly _currentPage = signal(0);
+  private readonly _lastPage = signal(1);
 
   readonly centers = this._centers.asReadonly();
+
   readonly loading = this._loading.asReadonly();
+  readonly loadingMore = this._loadingMore.asReadonly();
   readonly loaded = this._loaded.asReadonly();
+
   readonly error = this._error.asReadonly();
+  readonly loadMoreError = this._loadMoreError.asReadonly();
+
+  readonly hasMore = computed(
+    () => this._currentPage() < this._lastPage(),
+  );
 
   load(): void {
-    // منع تكرار الطلب إذا كانت البيانات محمّلة أو الطلب قيد التنفيذ
-    if (this._loaded() || this._loading()) return;
+    if (this._loaded() || this._loading()) {
+      return;
+    }
 
     this._loading.set(true);
     this._error.set(null);
 
-    this.http.get<MedicalCentersApiResponse>(this.endpoint).subscribe({
+    const params = new HttpParams().set('page', 1);
+
+    this.http.get<MedicalCentersApiResponse>(this.endpoint, { params }).subscribe({
       next: response => {
         this._centers.set(mapMedicalCenters(response.data ?? []));
+
+        this._currentPage.set(response.meta.current_page);
+        this._lastPage.set(response.meta.last_page);
+
         this._loaded.set(true);
         this._loading.set(false);
       },
       error: () => {
         this._error.set('تعذر تحميل المراكز الطبية. يرجى المحاولة مجدداً.');
         this._loading.set(false);
+      },
+    });
+  }
+
+  loadMore(): void {
+    if (
+      !this._loaded() ||
+      this._loading() ||
+      this._loadingMore() ||
+      !this.hasMore()
+    ) {
+      return;
+    }
+
+    const nextPage = this._currentPage() + 1;
+
+    this._loadingMore.set(true);
+    this._loadMoreError.set(null);
+
+    const params = new HttpParams().set('page', nextPage);
+
+    this.http.get<MedicalCentersApiResponse>(this.endpoint, { params }).subscribe({
+      next: response => {
+        this._centers.update(current => [
+          ...current,
+          ...mapMedicalCenters(response.data ?? []),
+        ]);
+
+        this._currentPage.set(response.meta.current_page);
+        this._lastPage.set(response.meta.last_page);
+
+        this._loadingMore.set(false);
+      },
+      error: () => {
+        this._loadMoreError.set('تعذر تحميل المزيد من المراكز الطبية.');
+        this._loadingMore.set(false);
       },
     });
   }
@@ -50,6 +109,11 @@ export class CentersService {
   }
 
   retry(): void {
-    this.load();
+    if (!this._loaded()) {
+      this.load();
+      return;
+    }
+
+    this.loadMore();
   }
 }
