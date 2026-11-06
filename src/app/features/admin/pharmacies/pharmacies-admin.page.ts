@@ -1,6 +1,5 @@
 
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { Pharmacy } from '../../../core/models/pharmacy.model';
 import { PharmaciesService } from '../../../core/services/pharmacies.service';
@@ -11,24 +10,31 @@ import {
 } from '../../../shared/components/data-table/data-table.component';
 
 import { DataPaginationComponent } from '../../../shared/components/data-pagination/data-pagination.component';
+import { AdminErrorAlertComponent } from '../../../shared/components/admin-error-alert/admin-error-alert.component';
+import { AdminPageLayoutComponent } from '../../../shared/components/admin-page-layout/admin-page-layout.component';
+import { AdminSearchComponent } from '../../../shared/components/admin-search/admin-search.component';
+import { AdminStatCardComponent } from '../../../shared/components/admin-stat-card/admin-stat-card.component';
 
 @Component({
   selector: 'app-admin-pharmacies',
   standalone: true,
   imports: [
-    FormsModule,
     DataTableComponent,
     DataPaginationComponent,
+    AdminErrorAlertComponent,
+    AdminPageLayoutComponent,
+    AdminSearchComponent,
+    AdminStatCardComponent,
   ],
   templateUrl: './pharmacies-admin.page.html',
 })
 export class PharmaciesAdminPage implements OnInit {
-  readonly pharmaciesService = inject(PharmaciesService);
+  private readonly service = inject(PharmaciesService);
 
-  readonly pharmacies = this.pharmaciesService.adminPharmacies;
-  readonly loading = this.pharmaciesService.adminLoading;
-  readonly error = this.pharmaciesService.adminError;
-  readonly pagination = this.pharmaciesService.adminPagination;
+  readonly pharmacies = this.service.adminPharmacies;
+  readonly loading = this.service.adminLoading;
+  readonly error = this.service.adminError;
+  readonly pagination = this.service.adminPagination;
 
   readonly search = signal('');
 
@@ -59,15 +65,15 @@ export class PharmaciesAdminPage implements OnInit {
   });
 
   ngOnInit(): void {
-    this.pharmaciesService.loadAdminPage(1);
+    this.service.loadAdminPage(1);
   }
 
   changePage(page: number): void {
-    this.pharmaciesService.loadAdminPage(page);
+    this.service.loadAdminPage(page);
   }
 
   retry(): void {
-    this.pharmaciesService.loadAdminPage(
+    this.service.loadAdminPage(
       this.pagination()?.current_page ?? 1,
     );
   }

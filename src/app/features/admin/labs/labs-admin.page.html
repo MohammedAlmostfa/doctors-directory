@@ -1,103 +1,33 @@
 
-<section class="space-y-6">
+<app-admin-page-layout
+  title="إدارة المخابر"
+  description="إدارة المخابر الطبية ومعلوماتها والخدمات المقدمة.">
+  <button
+    admin-action
+    type="button"
+    class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
+    (click)="addLab()">
+    <span class="material-symbols-outlined text-xl" aria-hidden="true">add</span>
+    إضافة مخبر
+  </button>
 
-  <!-- Page Header -->
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <h1 class="font-heading text-2xl font-bold text-ink">
-        إدارة المخابر
-      </h1>
+  <app-admin-stat-card admin-stat title="إجمالي المخابر" [value]="pagination()?.total ?? 0" />
+  <app-admin-stat-card admin-stat title="الصفحة الحالية" [value]="pagination()?.current_page ?? 0" />
+  <app-admin-stat-card admin-stat title="إجمالي الصفحات" [value]="pagination()?.last_page ?? 0" />
 
-      <p class="mt-1 text-sm text-muted">
-        إدارة المخابر الطبية ومعلوماتها والخدمات المقدمة.
-      </p>
-    </div>
+  <app-admin-search
+    admin-filter
+    id="lab-search"
+    label="البحث عن مخبر"
+    placeholder="ابحث بالاسم أو المحافظة أو المنطقة..."
+    [value]="search()"
+    (valueChange)="search.set($event)" />
 
-    <button
-      type="button"
-      class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
-      (click)="addLab()">
-
-      <span class="material-symbols-outlined text-xl">
-        add
-      </span>
-
-      إضافة مخبر
-    </button>
-  </div>
-
-  <!-- Statistics -->
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
-    <div class="rounded-2xl border border-line bg-white p-5">
-      <p class="text-sm text-muted">إجمالي المخابر</p>
-
-      <p class="mt-2 text-2xl font-bold text-ink">
-        {{ pagination()?.total ?? 0 }}
-      </p>
-    </div>
-
-    <div class="rounded-2xl border border-line bg-white p-5">
-      <p class="text-sm text-muted">الصفحة الحالية</p>
-
-      <p class="mt-2 text-2xl font-bold text-ink">
-        {{ pagination()?.current_page ?? 0 }}
-      </p>
-    </div>
-
-    <div class="rounded-2xl border border-line bg-white p-5">
-      <p class="text-sm text-muted">إجمالي الصفحات</p>
-
-      <p class="mt-2 text-2xl font-bold text-ink">
-        {{ pagination()?.last_page ?? 0 }}
-      </p>
-    </div>
-
-  </div>
-
-  <!-- Search -->
-  <div class="rounded-2xl border border-line bg-white p-4">
-    <label for="lab-search" class="field-label">
-      البحث عن مخبر
-    </label>
-
-    <div class="relative mt-2">
-      <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-subtle">
-        search
-      </span>
-
-      <input
-        id="lab-search"
-        type="search"
-        class="field-input pr-11"
-        placeholder="ابحث بالاسم أو المحافظة أو المنطقة..."
-        [ngModel]="search()"
-        (ngModelChange)="search.set($event)"
-      />
-    </div>
-  </div>
-
-  <!-- Error -->
-  @if (error()) {
-    <div class="rounded-xl border border-danger/20 bg-danger-soft p-4">
-      <div class="flex items-center justify-between gap-3">
-        <p class="text-sm text-danger">
-          {{ error() }}
-        </p>
-
-        <button
-          type="button"
-          class="text-sm font-semibold text-danger underline"
-          (click)="retry()">
-          إعادة المحاولة
-        </button>
-      </div>
-    </div>
+  @if (error(); as message) {
+    <app-admin-error-alert admin-error [message]="message" (retry)="retry()" />
   }
 
-  <!-- Table -->
   <div class="overflow-hidden rounded-2xl border border-line bg-white">
-
     <div class="border-b border-line px-5 py-4">
       <h2 class="font-heading font-bold text-ink">
         قائمة المخابر
@@ -119,15 +49,10 @@
     />
 
     @if (pagination() && !search()) {
-      <div class="border-t border-line px-5 py-4">
-        <app-data-pagination
-          [meta]="pagination()!"
-          [disabled]="loading()"
-          (pageChange)="changePage($event)"
-        />
-      </div>
+      <app-data-pagination
+        [meta]="pagination()!"
+        [disabled]="loading()"
+        (pageChange)="changePage($event)" />
     }
-
   </div>
-
-</section>
+</app-admin-page-layout>

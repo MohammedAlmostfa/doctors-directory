@@ -1,6 +1,5 @@
 
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { DoctorsService } from '../../../core/services/doctors.service';
 import { DoctorApiDto } from '../../../core/dto/doctor-api.dto';
@@ -11,14 +10,21 @@ import {
 } from '../../../shared/components/data-table/data-table.component';
 
 import { DataPaginationComponent } from '../../../shared/components/data-pagination/data-pagination.component';
+import { AdminErrorAlertComponent } from '../../../shared/components/admin-error-alert/admin-error-alert.component';
+import { AdminPageLayoutComponent } from '../../../shared/components/admin-page-layout/admin-page-layout.component';
+import { AdminSearchComponent } from '../../../shared/components/admin-search/admin-search.component';
+import { AdminStatCardComponent } from '../../../shared/components/admin-stat-card/admin-stat-card.component';
 
 @Component({
   selector: 'app-admin-doctors-page',
   standalone: true,
   imports: [
-    FormsModule,
     DataTableComponent,
     DataPaginationComponent,
+    AdminErrorAlertComponent,
+    AdminPageLayoutComponent,
+    AdminSearchComponent,
+    AdminStatCardComponent,
   ],
   templateUrl: './doctors-admin.page.html',
 })
@@ -33,7 +39,7 @@ export class DoctorsAdminPage implements OnInit {
   readonly search = signal('');
 
   readonly columns: DataTableColumn<DoctorApiDto>[] = [
-  { key: 'name', label: 'اسم الطبيب' },
+    { key: 'name', label: 'اسم الطبيب' },
     { key: 'specialty', label: 'التخصص' },
     { key: 'governorate', label: 'المحافظة' },
     { key: 'area', label: 'المنطقة' },

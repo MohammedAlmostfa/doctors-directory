@@ -1,5 +1,4 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { MedicalCenter } from '../../../core/models/medical-center.model';
 import { CentersService } from '../../../core/services/medical-centers.service';
@@ -10,24 +9,31 @@ import {
 } from '../../../shared/components/data-table/data-table.component';
 
 import { DataPaginationComponent } from '../../../shared/components/data-pagination/data-pagination.component';
+import { AdminErrorAlertComponent } from '../../../shared/components/admin-error-alert/admin-error-alert.component';
+import { AdminPageLayoutComponent } from '../../../shared/components/admin-page-layout/admin-page-layout.component';
+import { AdminSearchComponent } from '../../../shared/components/admin-search/admin-search.component';
+import { AdminStatCardComponent } from '../../../shared/components/admin-stat-card/admin-stat-card.component';
 
 @Component({
   selector: 'app-admin-centers',
   standalone: true,
   imports: [
-    FormsModule,
     DataTableComponent,
     DataPaginationComponent,
+    AdminErrorAlertComponent,
+    AdminPageLayoutComponent,
+    AdminSearchComponent,
+    AdminStatCardComponent,
   ],
   templateUrl: './centers-admin.page.html',
 })
 export class CentersAdminPage implements OnInit {
-  readonly centersService = inject(CentersService);
+  private readonly service = inject(CentersService);
 
-  readonly centers = this.centersService.adminCenters;
-  readonly loading = this.centersService.adminLoading;
-  readonly error = this.centersService.adminError;
-  readonly pagination = this.centersService.adminPagination;
+  readonly centers = this.service.adminCenters;
+  readonly loading = this.service.adminLoading;
+  readonly error = this.service.adminError;
+  readonly pagination = this.service.adminPagination;
 
   readonly search = signal('');
 
@@ -60,15 +66,15 @@ export class CentersAdminPage implements OnInit {
   });
 
   ngOnInit(): void {
-    this.centersService.loadAdminPage(1);
+    this.service.loadAdminPage(1);
   }
 
   changePage(page: number): void {
-    this.centersService.loadAdminPage(page);
+    this.service.loadAdminPage(page);
   }
 
   retry(): void {
-    this.centersService.loadAdminPage(
+    this.service.loadAdminPage(
       this.pagination()?.current_page ?? 1,
     );
   }
