@@ -1,8 +1,7 @@
 
 import { WeeklySchedule } from '../constants/week-days';
 
-
-export interface Doctor   {
+export interface Doctor {
   id: number;
   name: string;
 
@@ -22,14 +21,8 @@ export interface Doctor   {
   workingHours: WeeklySchedule;
   interests?: string[];
 
-    about?: string | null;
+  about?: string | null;
   mobile?: string | null;
   whatsapp?: string | null;
   email?: string | null;
-}
-
-export interface DoctorFilters {
-  q: string;
-  governorate: string;
-  specialty: string;
 }

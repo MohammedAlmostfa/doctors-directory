@@ -1,7 +1,7 @@
 import { MedicalCenter } from '../models/medical-center.model';
 import { MedicalCenterApiDto } from '../dto/medical-center-api.dto';
 import { CenterType } from '../constants/center-types';
-import { mapWorkingHours } from '../../shared/utils/working-hours';
+import { mapWorkingHours } from './working-hours.mapper';
 
 export function mapMedicalCenter(dto: MedicalCenterApiDto): MedicalCenter {
   return {

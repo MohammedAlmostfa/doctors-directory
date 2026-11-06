@@ -1,6 +1,6 @@
 import { DoctorApiDto } from '../dto/doctor-api.dto';
 import { Doctor } from '../models/doctor.model';
-import { mapWorkingHours } from '../../shared/utils/working-hours';
+import { mapWorkingHours } from './working-hours.mapper';
 
 export function mapDoctor(dto: DoctorApiDto): Doctor {
   return {

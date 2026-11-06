@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { OpeningStatus } from '../../../../utils/working-hours';
+import { OpeningStatus } from '../../../../../core/utils/working-hours';
 import { StatusBadgeComponent } from '../../../status-badge/status-badge.component';
 import { ListingDetails } from '../../listing-details.model';
 

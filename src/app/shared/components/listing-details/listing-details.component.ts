@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClockService } from '../../../core/services/clock.service';
 import { mapHref } from '../../utils/contact-links';
-import { getWeeklyStatus } from '../../utils/working-hours';
+import { getWeeklyStatus } from '../../../core/utils/working-hours';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { ListingDetails } from './listing-details.model';

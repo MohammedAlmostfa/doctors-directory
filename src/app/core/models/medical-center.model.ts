@@ -1,4 +1,3 @@
-import { CenterType } from '../constants/center-types';
 import { PlaceBase } from './place.model';
 
 export interface MedicalCenter extends PlaceBase {
@@ -8,10 +7,4 @@ export interface MedicalCenter extends PlaceBase {
   mobile?: string | null;
   whatsapp?: string | null;
   email?: string | null;
-}
-export interface CenterFilters {
-  q: string;
-  governorate: string;
-  type: CenterType | '';   // '' = كل الأنواع
-  openNow: boolean;
 }

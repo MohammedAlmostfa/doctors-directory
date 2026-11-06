@@ -7,10 +7,3 @@ export interface Pharmacy extends PlaceBase {
   whatsapp?: string | null;
   email?: string | null;
 }
-
-export interface PharmacyFilters {
-  q: string;
-  governorate: string;
-  openNow: boolean;
-  open24: boolean;
-}

@@ -35,7 +35,9 @@
       [showActions]="false"
       emptyTitle="لا توجد مراكز طبية"
       emptyMessage="لم يتم العثور على مراكز طبية مطابقة للبحث."
-    />
+        (edit)="editCenter()"
+      (delete)="deleteCenter()" />
+
 
     @if (pagination() && !search()) {
       <app-data-pagination

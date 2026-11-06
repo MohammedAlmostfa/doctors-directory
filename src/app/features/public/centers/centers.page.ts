@@ -2,7 +2,7 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 
 import { CENTER_TYPES } from '../../../core/constants/center-types';
-import { CentersService } from '../../../core/services/medical-centers.service';
+import { MedicalCentersService } from '../../../core/services/medical-centers.service';
 import { ClockService } from '../../../core/services/clock.service';
 
 import {
@@ -21,7 +21,7 @@ import { PlaceCardComponent } from '../../../shared/components/place-card/place-
 import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { getWeeklyStatus } from '../../../shared/utils/working-hours';
+import { getWeeklyStatus } from '../../../core/utils/working-hours';
 
 @Component({
   selector: 'app-centers-page',
@@ -36,7 +36,7 @@ import { getWeeklyStatus } from '../../../shared/utils/working-hours';
   templateUrl: './centers.page.html',
 })
 export class CentersPage implements OnInit {
-  private readonly service = inject(CentersService);
+  private readonly service = inject(MedicalCentersService);
   private readonly clock = inject(ClockService);
 
   readonly centers = this.service.centers;

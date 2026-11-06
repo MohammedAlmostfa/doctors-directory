@@ -8,7 +8,7 @@ import { mapMedicalCenters } from '../mappers/medical-center.mapper';
 import { environment } from '../../../environments/environment';
 import { PaginationMetaDto } from '../dto/pagination.dto';
 @Injectable({ providedIn: 'root' })
-export class CentersService {
+export class MedicalCentersService {
   private readonly http = inject(HttpClient);
   private readonly endpoint = `${environment.apiUrl}/medical-centers`;
 

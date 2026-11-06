@@ -8,7 +8,7 @@ import { ListingDetails } from '../../../shared/components/listing-details/listi
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
-import { isWeekly24Hours } from '../../../shared/utils/working-hours';
+import { isWeekly24Hours } from '../../../core/utils/working-hours';
 
 const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
   name: pharmacy.name,

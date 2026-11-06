@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { WEEK_DAYS, WeeklySchedule } from '../../../../../core/constants/week-days';
-import { formatRange, is24Hours } from '../../../../utils/working-hours';
+import { formatRange, is24Hours } from '../../../../../core/utils/working-hours';
 @Component({
   selector: 'app-weekly-hours',
   standalone: true,

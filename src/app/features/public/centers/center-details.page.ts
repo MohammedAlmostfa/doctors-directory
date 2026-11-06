@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, input } from '@angular/core';
 
 import { MedicalCenter } from '../../../core/models/medical-center.model';
-import { CentersService } from '../../../core/services/medical-centers.service';
+import { MedicalCentersService } from '../../../core/services/medical-centers.service';
 
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
@@ -80,7 +80,7 @@ const toDetails = (center: MedicalCenter): ListingDetails => ({
 export class CenterDetailsPage implements OnInit {
   readonly id = input<string>();
 
-  private readonly service = inject(CentersService);
+  private readonly service = inject(MedicalCentersService);
 
   readonly loading = this.service.loading;
   readonly error = this.service.error;

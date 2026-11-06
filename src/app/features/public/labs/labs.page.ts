@@ -18,7 +18,7 @@ import { PageHeroComponent } from '../../../shared/components/page-hero/page-her
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
-import { getWeeklyStatus } from '../../../shared/utils/working-hours';
+import { getWeeklyStatus } from '../../../core/utils/working-hours';
 
 @Component({
   selector: 'app-labs-page',

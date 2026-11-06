@@ -2,7 +2,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 
 import { DoctorsService } from '../../../core/services/doctors.service';
-import { DoctorApiDto } from '../../../core/dto/doctor-api.dto';
+import { Doctor } from '../../../core/models/doctor.model';
+import { mapDoctor } from '../../../core/mappers/doctor.mapper';
+import { WeeklySchedule } from '../../../core/constants/week-days';
+import { formatWeeklySchedule } from '../../../core/utils/working-hours';
 
 import {
   DataTableColumn,
@@ -38,32 +41,39 @@ export class DoctorsAdminPage implements OnInit {
 
   readonly search = signal('');
 
-  readonly columns: DataTableColumn<DoctorApiDto>[] = [
+  readonly columns: DataTableColumn<Doctor>[] = [
+    { key: 'id', label: 'المعرّف', align: 'center' },
     { key: 'name', label: 'اسم الطبيب' },
     { key: 'specialty', label: 'التخصص' },
     { key: 'governorate', label: 'المحافظة' },
     { key: 'area', label: 'المنطقة' },
+    { key: 'address', label: 'العنوان' },
     { key: 'phone', label: 'رقم الهاتف' },
+    { key: 'mobile', label: 'الجوال' },
+    { key: 'whatsapp', label: 'واتساب' },
+    { key: 'email', label: 'البريد الإلكتروني' },
+    { key: 'experienceYears', label: 'سنوات الخبرة', align: 'center' },
+    { key: 'profileImage', label: 'صورة الملف' },
+    { key: 'about', label: 'نبذة عن الطبيب' },
+    { key: 'interests', label: 'الاهتمامات' },
     {
-      key: 'experienceYears',
-      label: 'سنوات الخبرة',
-      align: 'center',
+      key: 'workingHours',
+      label: 'ساعات العمل الأسبوعية',
+      format: value => formatWeeklySchedule(value as WeeklySchedule),
     },
+    { key: 'mapUrl', label: 'رابط الخريطة' },
   ];
 
   readonly results = computed(() => {
     const query = this.search().trim().toLowerCase();
 
-    if (!query) {
-      return this.doctors();
-    }
-
-    return this.doctors().filter(doctor =>
+    return this.doctors().map(mapDoctor).filter(doctor =>
+      !query ||
       [
         doctor.name,
-        doctor.specialty.name,
-        doctor.area.name,
-        doctor.area.governorate?.name ?? '',
+        doctor.specialty,
+        doctor.area,
+        doctor.governorate,
         doctor.phone ?? '',
       ].some(value => value.toLowerCase().includes(query)),
     );
@@ -81,12 +91,12 @@ export class DoctorsAdminPage implements OnInit {
     // سنربطه بنموذج الإضافة في المرحلة التالية.
   }
 
-  editDoctor(doctor: DoctorApiDto): void {
+  editDoctor(doctor: Doctor): void {
     // سنربطه بنموذج التعديل في المرحلة التالية.
     console.log('Edit doctor:', doctor.id);
   }
 
-  deleteDoctor(doctor: DoctorApiDto): void {
+  deleteDoctor(doctor: Doctor): void {
     // سنضيف تأكيد الحذف وربط API لاحقاً.
     console.log('Delete doctor:', doctor.id);
   }

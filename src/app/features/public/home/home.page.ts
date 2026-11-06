@@ -1,14 +1,14 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SPECIALTIES } from '../../../core/constants/specialties';
-import { CentersService } from '../../../core/services/medical-centers.service';
+import { MedicalCentersService } from '../../../core/services/medical-centers.service';
 import { ClockService } from '../../../core/services/clock.service';
 import { DoctorsService } from '../../../core/services/doctors.service';
 import { LabsService } from '../../../core/services/labs.service';
 import { PharmaciesService } from '../../../core/services/pharmacies.service';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 import { SectionHeadingComponent } from '../../../shared/components/section-heading/section-heading.component';
-import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-hours';
+import { getWeeklyStatus, isWeekly24Hours } from '../../../core/utils/working-hours';
 import { HomeCtaComponent } from './components/home-cta/home-cta.component';
 import { HomeHeroComponent } from './components/home-hero/home-hero.component';
 import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
@@ -28,7 +28,7 @@ export class HomePage implements OnInit {
   private clock = inject(ClockService);
   private doctors = inject(DoctorsService);
   private pharmacies = inject(PharmaciesService);
-  private centers = inject(CentersService);
+  private centers = inject(MedicalCentersService);
   private labs = inject(LabsService);
 
   readonly specialties = SPECIALTIES;

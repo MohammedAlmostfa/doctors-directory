@@ -7,6 +7,7 @@ export interface DataTableColumn<T> {
   sortable?: boolean;
   align?: 'start' | 'center' | 'end';
   width?: string;
+  format?: (value: unknown, row: T) => string;
 }
 
 @Component({
@@ -29,8 +30,44 @@ export class DataTableComponent<T extends { id: number | string }> {
   readonly edit = output<T>();
   readonly delete = output<T>();
 
-  getValue(row: T, key: keyof T | string): unknown {
-    return (row as Record<string, unknown>)[key as string] ?? '—';
+  getValue(row: T, column: DataTableColumn<T>): string {
+    const value = String(column.key)
+      .split('.')
+      .reduce<unknown>((current, key) => {
+        if (current === null || typeof current !== 'object') {
+          return undefined;
+        }
+
+        return (current as Record<string, unknown>)[key];
+      }, row);
+
+    return column.format
+      ? column.format(value, row)
+      : this.formatValue(value);
+  }
+
+  private formatValue(value: unknown): string {
+    if (value === null || value === undefined || value === '') {
+      return '—';
+    }
+
+    if (typeof value === 'boolean') {
+      return value ? 'نعم' : 'لا';
+    }
+
+    if (Array.isArray(value)) {
+      return value.length
+        ? value.map(item => this.formatValue(item)).join('، ')
+        : '—';
+    }
+
+    if (typeof value === 'object') {
+      return Object.entries(value)
+        .map(([key, item]) => `${key}: ${this.formatValue(item)}`)
+        .join('، ') || '—';
+    }
+
+    return String(value);
   }
 
   onEdit(row: T): void {

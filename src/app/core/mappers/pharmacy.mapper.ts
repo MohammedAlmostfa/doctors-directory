@@ -2,7 +2,7 @@
 
 import { Pharmacy } from '../models/pharmacy.model';
 import { PharmacyApiDto } from '../dto/pharmacy-api.dto';
-import { mapWorkingHours } from '../../shared/utils/working-hours';
+import { mapWorkingHours } from './working-hours.mapper';
 
 export function mapPharmacy(dto: PharmacyApiDto): Pharmacy {
   const workingHours = mapWorkingHours(dto.workingHours ?? []);

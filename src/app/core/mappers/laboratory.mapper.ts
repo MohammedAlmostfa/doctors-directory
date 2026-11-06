@@ -1,6 +1,6 @@
 import { Lab } from '../models/lab.model';
 import { LaboratoryApiDto } from '../dto/laboratory-api.dto';
-import { mapWorkingHours } from '../../shared/utils/working-hours';
+import { mapWorkingHours } from './working-hours.mapper';
 
 export function mapLaboratory(dto: LaboratoryApiDto): Lab {
   return {

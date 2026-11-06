@@ -1,15 +1,33 @@
 import { describe, expect, it } from 'vitest';
 import {
   formatRange,
+  formatWeeklySchedule,
   getOpeningStatus,
   getWeeklyStatus,
   isWeekly24Hours,
 } from './working-hours';
-import { WeeklySchedule } from '../../core/constants/week-days';
+import { WeeklySchedule } from '../constants/week-days';
 
 describe('working-hours', () => {
   it('formats hours correctly for AM/PM', () => {
     expect(formatRange('07:00-19:00')).toBe('7:00 ص – 7:00 م');
+  });
+
+  it('formats all days in a weekly schedule', () => {
+    const schedule: WeeklySchedule = {
+      sat: ['08:00-16:00'],
+      sun: [],
+      mon: ['00:00-24:00'],
+      tue: [],
+      wed: [],
+      thu: [],
+      fri: [],
+    };
+
+    expect(formatWeeklySchedule(schedule)).toContain('السبت: 8:00 ص – 4:00 م');
+    expect(formatWeeklySchedule(schedule)).toContain('الأحد: مغلق');
+    expect(formatWeeklySchedule(schedule)).toContain('الاثنين: على مدار الساعة');
+    expect(formatWeeklySchedule(schedule).split(' | ')).toHaveLength(7);
   });
 
   it('marks overnight ranges as open when current time falls inside them', () => {

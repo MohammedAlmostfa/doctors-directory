@@ -1,8 +1,8 @@
 
 import { Routes } from '@angular/router';
 
-import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
-import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { PublicLayoutComponent } from './layout/public/public-layout/public-layout.component';
+import { AdminLayoutComponent } from './layout/admin/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
   // Public

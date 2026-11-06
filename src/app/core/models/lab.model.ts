@@ -7,10 +7,3 @@ export interface Lab extends PlaceBase {
   whatsapp?: string | null;
   email?: string | null;
 }
-
-export interface LabFilters {
-  q: string;
-  governorate: string;
-  openNow: boolean;
-  homeVisit: boolean;
-}

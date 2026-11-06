@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { PlaceBase } from '../../../core/models/place.model';
 import { WEEK_DAYS } from '../../../core/constants/week-days';
 import { ClockService } from '../../../core/services/clock.service';
-import { formatRange, getWeeklyStatus, isWeekly24Hours } from '../../utils/working-hours';
+import { formatRange, getWeeklyStatus, isWeekly24Hours } from '../../../core/utils/working-hours';
 import { mapHref as createMapHref } from '../../utils/contact-links';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 
