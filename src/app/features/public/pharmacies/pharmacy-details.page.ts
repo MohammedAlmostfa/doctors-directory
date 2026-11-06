@@ -5,6 +5,7 @@ import { PharmaciesService } from '../../../core/services/pharmacies.service';
 
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 import { isWeekly24Hours } from '../../../shared/utils/working-hours';
@@ -40,16 +41,24 @@ const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
   standalone: true,
   imports: [
     ListingDetailsComponent,
+    EmptyStateComponent,
     SkeletonCardsComponent,
   ],
   template: `
     @if (loading()) {
-      <app-skeleton-cards [count]="1" variant="place" />
+      <section class="container-page py-8">
+        <app-skeleton-cards [count]="1" variant="place" />
+      </section>
     } @else if (error()) {
-      <div class="text-center py-10">
-        <p>{{ error() }}</p>
-        <button type="button" (click)="retry()">إعادة المحاولة</button>
-      </div>
+      <section class="container-page flex flex-col gap-4 py-8">
+        <app-empty-state
+          title="تعذر تحميل بيانات الصيدلية"
+          [hint]="error() ?? 'تحقق من اتصالك بالإنترنت وحاول مجدداً.'" />
+
+        <button type="button" class="btn-outline self-center" (click)="retry()">
+          إعادة المحاولة
+        </button>
+      </section>
     } @else if (details(); as pharmacyDetails) {
       <app-listing-details
         [details]="pharmacyDetails"
@@ -57,7 +66,11 @@ const toDetails = (pharmacy: Pharmacy): ListingDetails => ({
         listLabel="الصيدليات"
       />
     } @else if (loaded()) {
-      <p class="text-center py-10">لم يتم العثور على الصيدلية.</p>
+      <section class="container-page py-8">
+        <app-empty-state
+          title="الصيدلية غير موجودة"
+          hint="لم نتمكن من العثور على الصيدلية المطلوبة." />
+      </section>
     }
   `,
 })

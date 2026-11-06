@@ -11,12 +11,13 @@ import {
   FilterSelect,
 } from '../../../shared/components/directory-filters/directory-filters.component';
 
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import {
+  DirectoryResultsComponent,
+  type DirectoryResultsConfig,
+} from '../../../shared/components/directory-results/directory-results.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
-import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 
-import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 
 @Component({
@@ -26,14 +27,14 @@ import { matchesQuery } from '../../../shared/utils/arabic-search';
     PageHeroComponent,
     DirectoryFiltersComponent,
     PlaceCardComponent,
-    EmptyStateComponent,
-    SkeletonCardsComponent,
-    InfiniteScrollDirective,
+    DirectoryResultsComponent,
   ],
   templateUrl: './doctors.page.html',
 })
 export class DoctorsPage implements OnInit {
   private readonly service = inject(DoctorsService);
+
+  readonly doctors = this.service.doctors;
 
   readonly loading = this.service.loading;
   readonly loadingMore = this.service.loadingMore;
@@ -42,8 +43,6 @@ export class DoctorsPage implements OnInit {
   readonly loadMoreError = this.service.loadMoreError;
 
   readonly hasMore = this.service.hasMore;
-
-  readonly doctors = this.service.doctors;
 
   readonly governorate = input<string>();
   readonly q = input<string>();
@@ -55,6 +54,16 @@ export class DoctorsPage implements OnInit {
     label: 'التخصص',
     allLabel: 'كل التخصصات',
     options: SPECIALTIES,
+  };
+
+  readonly resultsConfig: DirectoryResultsConfig = {
+    noun: 'طبيب',
+    note: 'المعلومات للتعريف فقط، يُفضّل الاتصال بالعيادة قبل الزيارة.',
+    errorTitle: 'تعذر تحميل الأطباء',
+    errorHint: 'تحقق من اتصالك بالإنترنت وحاول مجدداً.',
+    emptyTitle: 'لا يوجد أطباء مطابقون',
+    emptyHint: 'غيّر كلمات البحث أو ألغِ التصفية.',
+    skeletonVariant: 'place',
   };
 
   readonly results = computed(() => {

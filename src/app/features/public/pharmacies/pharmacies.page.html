@@ -11,80 +11,25 @@
       placeholder="اسم الصيدلية أو المنطقة"
       flagLabel="24 ساعة" />
 
-    @if (loading()) {
-      <!-- التحميل الأولي -->
-      <div class="flex h-5 items-center">
-        <span class="skeleton-bar h-3.5 w-52"></span>
-      </div>
-
-      <app-skeleton-cards [count]="6" />
-
-    } @else if (error()) {
-      <!-- فشل تحميل الصفحة الأولى -->
-      <app-empty-state
-        title="تعذر تحميل الصيدليات"
-        hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
-
-      <button
-        type="button"
-        class="btn-outline self-center"
-        (click)="retry()">
-        إعادة المحاولة
-      </button>
-
-    } @else {
-      <p class="text-sm text-subtle">
-        <b class="font-semibold text-ink">{{ results().length }} صيدلية</b>
-        · ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.
-      </p>
-
-      @if (results().length) {
-        <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          @for (p of results(); track p.id) {
-            <app-place-card
-              [place]="p"
-              icon="local_pharmacy"
-              [tag]="is24(p.workingHours) ? '24 ساعة' : ''"
-              [detailsLink]="'/pharmacies/' + p.id" />
-          }
-        </div>
-      } @else {
-        <app-empty-state
-          title="لا توجد صيدليات مطابقة"
-          hint="غيّر كلمات البحث أو ألغِ التصفية." />
-      }
-
-      <!-- Skeleton للدفعات الإضافية -->
-      @if (loadingMore()) {
-        <app-skeleton-cards [count]="3" />
-      }
-
-      <!-- فشل تحميل دفعة إضافية -->
-      @if (loadMoreError()) {
-        <div class="flex flex-col items-center gap-3 py-4">
-          <p class="text-sm text-subtle">
-            {{ loadMoreError() }}
-          </p>
-
-          <button
-            type="button"
-            class="btn-outline self-center"
-            (click)="retry()">
-            إعادة المحاولة
-          </button>
-        </div>
-      }
-
-      <!-- عنصر مراقبة نهاية القائمة -->
-      @if (hasMore()) {
-        <div
-          appInfiniteScroll
-          [disabled]="loadingMore() || !!loadMoreError()"
-          (loadMore)="loadMore()"
-          class="h-2 w-full"
-          aria-hidden="true">
-        </div>
-      }
-    }
+    <app-directory-results
+      [config]="resultsConfig"
+      [loading]="loading()"
+      [error]="!!error()"
+      [resultCount]="results().length"
+      [loadingMore]="loadingMore()"
+      [loadMoreError]="loadMoreError()"
+      [hasMore]="hasMore()"
+      (retry)="retry()"
+      (loadMore)="loadMore()">
+      <ng-template #cardContent>
+        @for (p of results(); track p.id) {
+          <app-place-card
+            [place]="p"
+            icon="local_pharmacy"
+            [tag]="is24(p.workingHours) ? '24 ساعة' : ''"
+            [detailsLink]="'/pharmacies/' + p.id" />
+        }
+      </ng-template>
+    </app-directory-results>
   </div>
 </section>

@@ -10,12 +10,12 @@ import {
   EMPTY_FILTERS,
 } from '../../../shared/components/directory-filters/directory-filters.component';
 
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import {
+  DirectoryResultsComponent,
+  type DirectoryResultsConfig,
+} from '../../../shared/components/directory-results/directory-results.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
-import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
-
-import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
@@ -27,9 +27,7 @@ import { getWeeklyStatus } from '../../../shared/utils/working-hours';
     PageHeroComponent,
     DirectoryFiltersComponent,
     PlaceCardComponent,
-    EmptyStateComponent,
-    SkeletonCardsComponent,
-    InfiniteScrollDirective,
+    DirectoryResultsComponent,
   ],
   templateUrl: './labs.page.html',
 })
@@ -42,8 +40,6 @@ export class LabsPage implements OnInit {
   readonly loading = this.service.loading;
   readonly loadingMore = this.service.loadingMore;
 
-  readonly loaded = this.service.loaded;
-
   readonly error = this.service.error;
   readonly loadMoreError = this.service.loadMoreError;
 
@@ -51,6 +47,15 @@ export class LabsPage implements OnInit {
 
   readonly governorate = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
+
+  readonly resultsConfig: DirectoryResultsConfig = {
+    noun: 'مخبر',
+    note: 'ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.',
+    errorTitle: 'تعذر تحميل المخابر',
+    errorHint: 'تحقق من اتصالك بالإنترنت وحاول مجدداً.',
+    emptyTitle: 'لا توجد مخابر مطابقة',
+    emptyHint: 'غيّر كلمات البحث أو ألغِ التصفية.',
+  };
 
   readonly results = computed(() => {
     const { q, governorate, openNow, flag } = this.filters();

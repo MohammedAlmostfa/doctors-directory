@@ -1,5 +1,5 @@
 
-import { Component, OnInit, computed, inject, signal, input } from '@angular/core';
+import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 
 import { CENTER_TYPES } from '../../../core/constants/center-types';
 import { CentersService } from '../../../core/services/medical-centers.service';
@@ -12,13 +12,13 @@ import {
   FilterSelect,
 } from '../../../shared/components/directory-filters/directory-filters.component';
 
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import {
+  DirectoryResultsComponent,
+  type DirectoryResultsConfig,
+} from '../../../shared/components/directory-results/directory-results.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
-import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 import { SpecialtyChipsComponent } from './components/specialty-chips/specialty-chips.component';
-
-import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus } from '../../../shared/utils/working-hours';
@@ -31,9 +31,7 @@ import { getWeeklyStatus } from '../../../shared/utils/working-hours';
     DirectoryFiltersComponent,
     PlaceCardComponent,
     SpecialtyChipsComponent,
-    EmptyStateComponent,
-    SkeletonCardsComponent,
-    InfiniteScrollDirective,
+    DirectoryResultsComponent,
   ],
   templateUrl: './centers.page.html',
 })
@@ -45,8 +43,6 @@ export class CentersPage implements OnInit {
 
   readonly loading = this.service.loading;
   readonly loadingMore = this.service.loadingMore;
-
-  readonly loaded = this.service.loaded;
 
   readonly error = this.service.error;
   readonly loadMoreError = this.service.loadMoreError;
@@ -62,6 +58,16 @@ export class CentersPage implements OnInit {
     label: 'نوع المركز',
     allLabel: 'كل الأنواع',
     options: CENTER_TYPES,
+  };
+
+  readonly resultsConfig: DirectoryResultsConfig = {
+    noun: 'مركز',
+    note: 'ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.',
+    errorTitle: 'تعذر تحميل المراكز الطبية',
+    errorHint: 'تحقق من اتصالك بالإنترنت وحاول مجدداً.',
+    emptyTitle: 'لا توجد مراكز مطابقة',
+    emptyHint: 'غيّر كلمات البحث أو ألغِ التصفية.',
+    skeletonChips: true,
   };
 
   readonly results = computed(() => {

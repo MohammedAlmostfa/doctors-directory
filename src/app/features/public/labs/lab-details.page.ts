@@ -5,6 +5,7 @@ import { LabsService } from '../../../core/services/labs.service';
 
 import { ListingDetailsComponent } from '../../../shared/components/listing-details/listing-details.component';
 import { ListingDetails } from '../../../shared/components/listing-details/listing-details.model';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
 
 const toDetails = (lab: Lab): ListingDetails => ({
@@ -38,24 +39,25 @@ const toDetails = (lab: Lab): ListingDetails => ({
 @Component({
   selector: 'app-lab-details-page',
   standalone: true,
-  imports: [ListingDetailsComponent, SkeletonCardsComponent],
+  imports: [ListingDetailsComponent, EmptyStateComponent, SkeletonCardsComponent],
   template: `
     @if (loading()) {
-      <div class="container mx-auto px-4 py-12">
-        <app-skeleton-cards variant="place" />
-      </div>
+      <section class="container-page py-8">
+        <app-skeleton-cards [count]="1" variant="place" />
+      </section>
     } @else if (error()) {
-      <div class="container mx-auto px-4 py-12 text-center">
-        <p class="mb-4 text-red-600">{{ error() }}</p>
+      <section class="container-page flex flex-col gap-4 py-8">
+        <app-empty-state
+          title="تعذر تحميل بيانات المخبر"
+          [hint]="error() ?? 'تحقق من اتصالك بالإنترنت وحاول مجدداً.'" />
 
         <button
           type="button"
           (click)="retry()"
-          class="rounded-lg bg-brand px-5 py-2 text-white"
-        >
+          class="btn-outline self-center">
           إعادة المحاولة
         </button>
-      </div>
+      </section>
     } @else if (details(); as labDetails) {
       <app-listing-details
         [details]="labDetails"
@@ -63,9 +65,11 @@ const toDetails = (lab: Lab): ListingDetails => ({
         listLabel="المخابر"
       />
     } @else if (loaded()) {
-      <div class="container mx-auto px-4 py-12 text-center">
-        <p>المخبر غير موجود.</p>
-      </div>
+      <section class="container-page py-8">
+        <app-empty-state
+          title="المخبر غير موجود"
+          hint="لم نتمكن من العثور على المخبر المطلوب." />
+      </section>
     }
   `,
 })

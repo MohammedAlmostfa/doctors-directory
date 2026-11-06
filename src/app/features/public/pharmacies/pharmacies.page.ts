@@ -11,12 +11,12 @@ import {
   EMPTY_FILTERS,
 } from '../../../shared/components/directory-filters/directory-filters.component';
 
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import {
+  DirectoryResultsComponent,
+  type DirectoryResultsConfig,
+} from '../../../shared/components/directory-results/directory-results.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
-import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
-
-import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 
 import { matchesQuery } from '../../../shared/utils/arabic-search';
 import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-hours';
@@ -28,9 +28,7 @@ import { getWeeklyStatus, isWeekly24Hours } from '../../../shared/utils/working-
     PageHeroComponent,
     DirectoryFiltersComponent,
     PlaceCardComponent,
-    EmptyStateComponent,
-    SkeletonCardsComponent,
-    InfiniteScrollDirective,
+    DirectoryResultsComponent,
   ],
   templateUrl: './pharmacies.page.html',
 })
@@ -46,11 +44,19 @@ export class PharmaciesPage implements OnInit {
   readonly error = this.service.error;
   readonly loadMoreError = this.service.loadMoreError;
 
-  readonly loaded = this.service.loaded;
   readonly hasMore = this.service.hasMore;
 
   readonly governorate = input<string>();
   readonly filters = signal<DirectoryFilters>({ ...EMPTY_FILTERS });
+
+  readonly resultsConfig: DirectoryResultsConfig = {
+    noun: 'صيدلية',
+    note: 'ساعات الدوام قد تتغير، يُفضّل الاتصال قبل الزيارة.',
+    errorTitle: 'تعذر تحميل الصيدليات',
+    errorHint: 'تحقق من اتصالك بالإنترنت وحاول مجدداً.',
+    emptyTitle: 'لا توجد صيدليات مطابقة',
+    emptyHint: 'غيّر كلمات البحث أو ألغِ التصفية.',
+  };
 
   readonly results = computed(() => {
     const { q, governorate, openNow, flag } = this.filters();

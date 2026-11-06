@@ -59,12 +59,12 @@ const toDetails = (doctor: Doctor): ListingDetails => ({
         <app-skeleton-cards [count]="1" variant="doctor" />
       </section>
     } @else if (error()) {
-      <section class="container-page py-8">
+      <section class="container-page flex flex-col gap-4 py-8">
         <app-empty-state
           title="تعذر تحميل بيانات الطبيب"
           hint="تحقق من اتصالك بالإنترنت وحاول مجدداً." />
 
-        <button type="button" (click)="retry()">
+        <button type="button" class="btn-outline self-center" (click)="retry()">
           إعادة المحاولة
         </button>
       </section>
