@@ -14,7 +14,7 @@ import {
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { PageHeroComponent } from '../../../shared/components/page-hero/page-hero.component';
 import { SkeletonCardsComponent } from '../../../shared/components/skeleton-cards/skeleton-cards.component';
-import { DoctorCardComponent } from './components/doctor-card/doctor-card.component';
+import { PlaceCardComponent } from '../../../shared/components/place-card/place-card.component';
 
 import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.directive';
 import { matchesQuery } from '../../../shared/utils/arabic-search';
@@ -25,7 +25,7 @@ import { matchesQuery } from '../../../shared/utils/arabic-search';
   imports: [
     PageHeroComponent,
     DirectoryFiltersComponent,
-    DoctorCardComponent,
+    PlaceCardComponent,
     EmptyStateComponent,
     SkeletonCardsComponent,
     InfiniteScrollDirective,
