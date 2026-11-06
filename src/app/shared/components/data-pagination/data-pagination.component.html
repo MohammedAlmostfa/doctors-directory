@@ -1,0 +1,52 @@
+
+@if (meta().last_page > 1) {
+  <div class="flex flex-col gap-4 border-t border-line px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+    <p class="text-sm text-muted">
+      عرض
+      <span class="font-semibold text-ink">{{ meta().from ?? 0 }}</span>
+      إلى
+      <span class="font-semibold text-ink">{{ meta().to ?? 0 }}</span>
+      من
+      <span class="font-semibold text-ink">{{ meta().total }}</span>
+      نتيجة
+    </p>
+
+    <nav aria-label="التنقل بين الصفحات" class="flex items-center justify-center gap-1">
+
+      <button
+        type="button"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition hover:bg-panel disabled:cursor-not-allowed disabled:opacity-40"
+        [disabled]="!canGoPrevious || disabled()"
+        aria-label="الصفحة السابقة"
+        (click)="previous()">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+
+      @for (page of pages(); track page) {
+        <button
+          type="button"
+          class="h-9 min-w-9 rounded-lg px-2 text-sm font-semibold transition"
+          [class.bg-brand]="page === meta().current_page"
+          [class.text-white]="page === meta().current_page"
+          [class.text-muted]="page !== meta().current_page"
+          [class.hover:bg-panel]="page !== meta().current_page"
+          [disabled]="disabled()"
+          [attr.aria-current]="page === meta().current_page ? 'page' : null"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+      }
+
+      <button
+        type="button"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition hover:bg-panel disabled:cursor-not-allowed disabled:opacity-40"
+        [disabled]="!canGoNext || disabled()"
+        aria-label="الصفحة التالية"
+        (click)="next()">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+
+    </nav>
+  </div>
+}

@@ -1,7 +1,11 @@
+
 import { Routes } from '@angular/router';
+
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
+  // Public
   {
     path: '',
     component: PublicLayoutComponent,
@@ -55,5 +59,43 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // Admin
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'doctors',
+      },
+      {
+        path: 'doctors',
+        title: 'إدارة الأطباء',
+        loadComponent: () =>
+          import('./features/admin/doctors/doctors-admin.page').then(m => m.DoctorsAdminPage),
+      },
+      {
+        path: 'centers',
+        title: 'إدارة المراكز الطبية',
+        loadComponent: () =>
+          import('./features/admin/centers/centers-admin.page').then(m => m.CentersAdminPage),
+      },
+      {
+        path: 'labs',
+        title: 'إدارة المخابر',
+        loadComponent: () =>
+          import('./features/admin/labs/labs-admin.page').then(m => m.LabsAdminPage),
+      },
+      {
+        path: 'pharmacies',
+        title: 'إدارة الصيدليات',
+        loadComponent: () =>
+            import('./features/admin/pharmacies/pharmacies-admin.page').then(m => m.PharmaciesAdminPage),
+      },
+    ],
+  },
+
   { path: '**', redirectTo: '' },
 ];

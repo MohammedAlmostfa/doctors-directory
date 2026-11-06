@@ -6,7 +6,7 @@ import { Pharmacy } from '../models/pharmacy.model';
 import { PharmaciesApiResponse } from '../dto/pharmacy-api.dto';
 import { mapPharmacies } from '../mappers/pharmacy.mapper';
 import { environment } from '../../../environments/environment';
-
+import { PaginationMetaDto } from '../dto/pagination.dto';
 @Injectable({ providedIn: 'root' })
 export class PharmaciesService {
   private readonly http = inject(HttpClient);
@@ -32,6 +32,17 @@ export class PharmaciesService {
 
   readonly error = this._error.asReadonly();
   readonly loadMoreError = this._loadMoreError.asReadonly();
+
+// Admin pagination state
+private readonly _adminPharmacies = signal<Pharmacy[]>([]);
+private readonly _adminLoading = signal(false);
+private readonly _adminError = signal<string | null>(null);
+private readonly _adminPagination = signal<PaginationMetaDto | null>(null);
+
+readonly adminPharmacies = this._adminPharmacies.asReadonly();
+readonly adminLoading = this._adminLoading.asReadonly();
+readonly adminError = this._adminError.asReadonly();
+readonly adminPagination = this._adminPagination.asReadonly();
 
   readonly hasMore = computed(
     () => this._currentPage() < this._lastPage(),
@@ -119,4 +130,30 @@ export class PharmaciesService {
 
     this.loadMore();
   }
+
+  /** تحميل صفحة محددة للأدمن */
+loadAdminPage(page: number = 1): void {
+  if (this._adminLoading()) {
+    return;
+  }
+
+  this._adminLoading.set(true);
+  this._adminError.set(null);
+
+  const params = new HttpParams().set('page', page);
+
+  this.http
+    .get<PharmaciesApiResponse>(this.endpoint, { params })
+    .subscribe({
+      next: response => {
+        this._adminPharmacies.set(mapPharmacies(response.data ?? []));
+        this._adminPagination.set(response.meta);
+        this._adminLoading.set(false);
+      },
+      error: () => {
+        this._adminError.set('تعذر تحميل الصيدليات. يرجى المحاولة مجدداً.');
+        this._adminLoading.set(false);
+      },
+    });
+}
 }

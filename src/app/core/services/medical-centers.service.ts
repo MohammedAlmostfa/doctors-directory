@@ -6,7 +6,7 @@ import { MedicalCenter } from '../models/medical-center.model';
 import { MedicalCentersApiResponse } from '../dto/medical-center-api.dto';
 import { mapMedicalCenters } from '../mappers/medical-center.mapper';
 import { environment } from '../../../environments/environment';
-
+import { PaginationMetaDto } from '../dto/pagination.dto';
 @Injectable({ providedIn: 'root' })
 export class CentersService {
   private readonly http = inject(HttpClient);
@@ -32,7 +32,16 @@ export class CentersService {
 
   readonly error = this._error.asReadonly();
   readonly loadMoreError = this._loadMoreError.asReadonly();
+// Admin pagination
+private readonly _adminCenters = signal<MedicalCenter[]>([]);
+private readonly _adminLoading = signal(false);
+private readonly _adminError = signal<string | null>(null);
+private readonly _adminPagination = signal<PaginationMetaDto | null>(null);
 
+readonly adminCenters = this._adminCenters.asReadonly();
+readonly adminLoading = this._adminLoading.asReadonly();
+readonly adminError = this._adminError.asReadonly();
+readonly adminPagination = this._adminPagination.asReadonly();
   readonly hasMore = computed(
     () => this._currentPage() < this._lastPage(),
   );
@@ -116,4 +125,31 @@ export class CentersService {
 
     this.loadMore();
   }
+
+  loadAdminPage(page: number = 1): void {
+  if (this._adminLoading()) {
+    return;
+  }
+
+  this._adminLoading.set(true);
+  this._adminError.set(null);
+
+  const params = new HttpParams().set('page', page);
+
+  this.http
+    .get<MedicalCentersApiResponse>(this.endpoint, { params })
+    .subscribe({
+      next: response => {
+        this._adminCenters.set(mapMedicalCenters(response.data ?? []));
+        this._adminPagination.set(response.meta);
+        this._adminLoading.set(false);
+      },
+      error: () => {
+        this._adminError.set(
+          'تعذر تحميل المراكز الطبية. يرجى المحاولة مجدداً.',
+        );
+        this._adminLoading.set(false);
+      },
+    });
+}
 }

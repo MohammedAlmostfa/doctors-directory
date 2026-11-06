@@ -2,15 +2,23 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { Lab } from '../models/lab.model';
-import { LaboratoriesApiResponse } from '../dto/laboratory-api.dto';
-import { mapLaboratories } from '../mappers/laboratory.mapper';
 import { environment } from '../../../environments/environment';
+
+import { LaboratoriesApiResponse } from '../dto/laboratory-api.dto';
+import { PaginationMetaDto } from '../dto/pagination.dto';
+
+import { Lab } from '../models/lab.model';
+
+import { mapLaboratories } from '../mappers/laboratory.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class LabsService {
   private readonly http = inject(HttpClient);
   private readonly endpoint = `${environment.apiUrl}/laboratories`;
+
+  // ============================================
+  // Public State - Infinite Scroll
+  // ============================================
 
   private readonly _labs = signal<Lab[]>([]);
 
@@ -23,6 +31,19 @@ export class LabsService {
 
   private readonly _currentPage = signal(0);
   private readonly _lastPage = signal(1);
+
+  // ============================================
+  // Admin State - Server-side Pagination
+  // ============================================
+
+  private readonly _adminLabs = signal<Lab[]>([]);
+  private readonly _adminLoading = signal(false);
+  private readonly _adminError = signal<string | null>(null);
+  private readonly _adminPagination = signal<PaginationMetaDto | null>(null);
+
+  // ============================================
+  // Public Readonly State
+  // ============================================
 
   readonly labs = this._labs.asReadonly();
 
@@ -37,6 +58,19 @@ export class LabsService {
     () => this._currentPage() < this._lastPage(),
   );
 
+  // ============================================
+  // Admin Readonly State
+  // ============================================
+
+  readonly adminLabs = this._adminLabs.asReadonly();
+  readonly adminLoading = this._adminLoading.asReadonly();
+  readonly adminError = this._adminError.asReadonly();
+  readonly adminPagination = this._adminPagination.asReadonly();
+
+  // ============================================
+  // Public Methods - Infinite Scroll
+  // ============================================
+
   load(): void {
     if (this._loaded() || this._loading()) {
       return;
@@ -47,21 +81,26 @@ export class LabsService {
 
     const params = new HttpParams().set('page', 1);
 
-    this.http.get<LaboratoriesApiResponse>(this.endpoint, { params }).subscribe({
-      next: response => {
-        this._labs.set(mapLaboratories(response.data ?? []));
+    this.http
+      .get<LaboratoriesApiResponse>(this.endpoint, { params })
+      .subscribe({
+        next: response => {
+          this._labs.set(mapLaboratories(response.data ?? []));
 
-        this._currentPage.set(response.meta.current_page);
-        this._lastPage.set(response.meta.last_page);
+          this._currentPage.set(response.meta.current_page);
+          this._lastPage.set(response.meta.last_page);
 
-        this._loaded.set(true);
-        this._loading.set(false);
-      },
-      error: () => {
-        this._error.set('تعذر تحميل المخابر. يرجى المحاولة مجدداً.');
-        this._loading.set(false);
-      },
-    });
+          this._loaded.set(true);
+          this._loading.set(false);
+        },
+        error: () => {
+          this._error.set(
+            'تعذر تحميل المخابر. يرجى المحاولة مجدداً.',
+          );
+
+          this._loading.set(false);
+        },
+      });
   }
 
   loadMore(): void {
@@ -81,23 +120,28 @@ export class LabsService {
 
     const params = new HttpParams().set('page', nextPage);
 
-    this.http.get<LaboratoriesApiResponse>(this.endpoint, { params }).subscribe({
-      next: response => {
-        this._labs.update(current => [
-          ...current,
-          ...mapLaboratories(response.data ?? []),
-        ]);
+    this.http
+      .get<LaboratoriesApiResponse>(this.endpoint, { params })
+      .subscribe({
+        next: response => {
+          this._labs.update(current => [
+            ...current,
+            ...mapLaboratories(response.data ?? []),
+          ]);
 
-        this._currentPage.set(response.meta.current_page);
-        this._lastPage.set(response.meta.last_page);
+          this._currentPage.set(response.meta.current_page);
+          this._lastPage.set(response.meta.last_page);
 
-        this._loadingMore.set(false);
-      },
-      error: () => {
-        this._loadMoreError.set('تعذر تحميل المزيد من المخابر.');
-        this._loadingMore.set(false);
-      },
-    });
+          this._loadingMore.set(false);
+        },
+        error: () => {
+          this._loadMoreError.set(
+            'تعذر تحميل المزيد من المخابر.',
+          );
+
+          this._loadingMore.set(false);
+        },
+      });
   }
 
   getAll(): Lab[] {
@@ -115,5 +159,40 @@ export class LabsService {
     }
 
     this.loadMore();
+  }
+
+  // ============================================
+  // Admin Methods - Server-side Pagination
+  // ============================================
+
+  loadAdminPage(page: number = 1): void {
+    if (this._adminLoading()) {
+      return;
+    }
+
+    this._adminLoading.set(true);
+    this._adminError.set(null);
+
+    const params = new HttpParams().set('page', page);
+
+    this.http
+      .get<LaboratoriesApiResponse>(this.endpoint, { params })
+      .subscribe({
+        next: response => {
+          this._adminLabs.set(
+            mapLaboratories(response.data ?? []),
+          );
+
+          this._adminPagination.set(response.meta);
+          this._adminLoading.set(false);
+        },
+        error: () => {
+          this._adminError.set(
+            'تعذر تحميل المخابر. يرجى المحاولة مجدداً.',
+          );
+
+          this._adminLoading.set(false);
+        },
+      });
   }
 }

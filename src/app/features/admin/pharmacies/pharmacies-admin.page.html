@@ -1,0 +1,120 @@
+
+<section class="space-y-6">
+
+  <!-- Page Header -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="font-heading text-2xl font-bold text-ink">
+        إدارة الصيدليات
+      </h1>
+
+      <p class="mt-1 text-sm text-muted">
+        إدارة بيانات الصيدليات ومعلومات التواصل والموقع.
+      </p>
+    </div>
+  </div>
+
+  <!-- Statistics -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+    <div class="rounded-2xl border border-line bg-white p-5">
+      <p class="text-sm text-muted">إجمالي الصيدليات</p>
+
+      <p class="mt-2 text-2xl font-bold text-ink">
+        {{ pagination()?.total ?? 0 }}
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-line bg-white p-5">
+      <p class="text-sm text-muted">الصفحة الحالية</p>
+
+      <p class="mt-2 text-2xl font-bold text-ink">
+        {{ pagination()?.current_page ?? 0 }}
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-line bg-white p-5">
+      <p class="text-sm text-muted">إجمالي الصفحات</p>
+
+      <p class="mt-2 text-2xl font-bold text-ink">
+        {{ pagination()?.last_page ?? 0 }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Search -->
+  <div class="rounded-2xl border border-line bg-white p-4">
+    <label for="pharmacy-search" class="field-label">
+      البحث عن صيدلية
+    </label>
+
+    <div class="relative mt-2">
+      <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-subtle">
+        search
+      </span>
+
+      <input
+        id="pharmacy-search"
+        type="search"
+        class="field-input pr-11"
+        placeholder="ابحث بالاسم أو المحافظة أو المنطقة أو الهاتف..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="rounded-xl border border-danger/20 bg-danger-soft p-4">
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-sm text-danger">
+          {{ error() }}
+        </p>
+
+        <button
+          type="button"
+          class="text-sm font-semibold text-danger underline"
+          (click)="retry()">
+          إعادة المحاولة
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Table -->
+  <div class="overflow-hidden rounded-2xl border border-line bg-white">
+
+    <div class="border-b border-line px-5 py-4">
+      <h2 class="font-heading font-bold text-ink">
+        قائمة الصيدليات
+      </h2>
+
+      <p class="mt-1 text-xs text-muted">
+        {{ results().length }} نتيجة في الصفحة الحالية
+      </p>
+    </div>
+
+    <app-data-table
+      [columns]="columns"
+      [data]="results()"
+      [loading]="loading()"
+      [showActions]="false"
+      emptyTitle="لا توجد صيدليات"
+      emptyMessage="لم يتم العثور على صيدليات مطابقة للبحث."
+    />
+
+    @if (pagination() && !search()) {
+      <div class="border-t border-line px-5 py-4">
+        <app-data-pagination
+          [meta]="pagination()!"
+          [disabled]="loading()"
+          (pageChange)="changePage($event)"
+        />
+      </div>
+    }
+
+  </div>
+
+</section>
