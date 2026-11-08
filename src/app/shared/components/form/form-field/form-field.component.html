@@ -1,0 +1,56 @@
+<div class="space-y-1.5">
+  <label
+    [for]="id()"
+    class="block text-sm font-semibold text-ink"
+  >
+    {{ label() }}
+
+    @if (required()) {
+      <span class="text-red-500">*</span>
+    }
+  </label>
+
+  <div class="relative">
+    @if (icon()) {
+      <span
+        class="icon absolute start-3.5 top-1/2 -translate-y-1/2 text-subtle"
+      >
+        {{ icon() }}
+      </span>
+    }
+
+    <input
+      [id]="id()"
+      [type]="type()"
+      [value]="value"
+      [placeholder]="placeholder()"
+      [disabled]="disabled"
+      [required]="required()"
+      [attr.aria-invalid]="invalid"
+      [attr.aria-describedby]="
+        invalid
+          ? id() + '-error'
+          : hint()
+            ? id() + '-hint'
+            : null
+      "
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      class="h-11 w-full rounded-md border bg-white px-3.5 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-brand focus:ring-1 focus:ring-brand disabled:bg-canvas disabled:text-subtle"
+      [class.ps-10]="!!icon()"
+      [class.border-red-500]="invalid"
+      [class.border-line-strong]="!invalid"
+    />
+  </div>
+
+  <app-form-error
+    [control]="ngControl?.control ?? null"
+    [id]="id() + '-error'"
+  />
+
+  @if (hint() && !invalid) {
+    <p [id]="id() + '-hint'" class="text-xs text-subtle">
+      {{ hint() }}
+    </p>
+  }
+</div>

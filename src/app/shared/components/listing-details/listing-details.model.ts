@@ -12,6 +12,7 @@ export interface ListingDetails {
   name: string;
   icon?: string;
   initials?: string;
+  imageUrl?: string | null;
   subtitle?: ListingLink;      // التخصص / نوع المركز
   badges?: string[];           // سحب منزلي / 24 ساعة
   location: ListingLink;       // 'دمشق – المزة' (يفتح القائمة مفلترة بالمحافظة)

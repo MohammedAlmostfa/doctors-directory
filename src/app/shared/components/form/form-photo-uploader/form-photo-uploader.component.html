@@ -1,0 +1,82 @@
+<div class="space-y-2">
+  <label
+    [for]="id()"
+    class="block text-sm font-semibold text-ink"
+  >
+    {{ label() }}
+  </label>
+
+  <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+
+    <!-- Image Preview -->
+    <div
+      class="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-canvas"
+    >
+      @if (previewUrl(); as url) {
+        <img
+          [src]="url"
+          alt="معاينة الصورة"
+          class="h-full w-full object-cover"
+        />
+      } @else {
+        <span class="icon text-4xl text-subtle">
+          account_circle
+        </span>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="space-y-3">
+      <input
+        #fileInput
+        [id]="id()"
+        type="file"
+        [accept]="accept()"
+        [disabled]="disabled()"
+        [attr.aria-invalid]="invalid"
+        [attr.aria-describedby]="invalid ? id() + '-error' : null"
+        (change)="onFileSelected($event)"
+        class="hidden"
+      />
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          (click)="openFilePicker()"
+          [disabled]="disabled()"
+          class="inline-flex h-9 items-center gap-2 rounded-lg border border-line-strong bg-white px-4 text-sm font-medium text-ink transition-colors hover:border-brand hover:text-brand disabled:opacity-50"
+        >
+          <span class="icon text-lg">upload</span>
+          {{ previewUrl() ? 'تغيير الصورة' : 'اختيار صورة' }}
+        </button>
+
+        @if (previewUrl()) {
+          <button
+            type="button"
+            (click)="removeImage()"
+            [disabled]="disabled()"
+            class="inline-flex h-9 items-center gap-2 rounded-lg px-3 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50"
+          >
+            <span class="icon text-lg">delete</span>
+            حذف
+          </button>
+        }
+      </div>
+
+      <p class="text-xs text-subtle">
+        {{ hint() }}
+      </p>
+    </div>
+  </div>
+
+  @if (errorMessage(); as error) {
+    <p class="text-xs text-red-600">
+      {{ error }}
+    </p>
+  }
+
+  <app-form-error
+    [control]="ngControl?.control ?? null"
+    [id]="id() + '-error'"
+  />
+</div>

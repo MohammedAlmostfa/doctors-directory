@@ -10,9 +10,11 @@ export interface DoctorApiDto {
   phone: string | null;
   mobile: string | null;
   whatsapp: string | null;
+  email?: string | null;
   experience_years: number | null;
   about: string | null;
   profile_image: string | null;
+  interests?: string[] | null;
 
   specialty: SpecialtyDto;
   area: AreaDto;

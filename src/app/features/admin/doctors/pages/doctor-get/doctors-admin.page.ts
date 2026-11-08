@@ -1,22 +1,29 @@
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { DoctorsService } from '../../../core/services/doctors.service';
-import { Doctor } from '../../../core/models/doctor.model';
-import { mapDoctor } from '../../../core/mappers/doctor.mapper';
-import { WeeklySchedule } from '../../../core/constants/week-days';
-import { formatWeeklySchedule } from '../../../core/utils/working-hours';
+import { DoctorsService } from '../../../../../core/services/doctors.service';
+import { Doctor } from '../../../../../core/models/doctor.model';
+import { mapDoctor } from '../../../../../core/mappers/doctor.mapper';
+import { WeeklySchedule } from '../../../../../core/constants/week-days';
+import { formatWeeklySchedule } from '../../../../../core/utils/working-hours';
 
 import {
   DataTableColumn,
   DataTableComponent,
-} from '../../../shared/components/data-table/data-table.component';
+} from '../../../../../shared/components/data-table/data-table.component';
 
-import { DataPaginationComponent } from '../../../shared/components/data-pagination/data-pagination.component';
-import { AdminErrorAlertComponent } from '../../../shared/components/admin-error-alert/admin-error-alert.component';
-import { AdminPageLayoutComponent } from '../../../shared/components/admin-page-layout/admin-page-layout.component';
-import { AdminSearchComponent } from '../../../shared/components/admin-search/admin-search.component';
-import { AdminStatCardComponent } from '../../../shared/components/admin-stat-card/admin-stat-card.component';
+import { DataPaginationComponent } from '../../../../../shared/components/data-pagination/data-pagination.component';
+import { AdminErrorAlertComponent } from '../../../../../shared/components/admin-error-alert/admin-error-alert.component';
+import { AdminPageLayoutComponent } from '../../../../../shared/components/admin-page-layout/admin-page-layout.component';
+import { AdminSearchComponent } from '../../../../../shared/components/admin-search/admin-search.component';
+import { AdminStatCardComponent } from '../../../../../shared/components/admin-stat-card/admin-stat-card.component';
 
 @Component({
   selector: 'app-admin-doctors-page',
@@ -33,6 +40,7 @@ import { AdminStatCardComponent } from '../../../shared/components/admin-stat-ca
 })
 export class DoctorsAdminPage implements OnInit {
   private readonly service = inject(DoctorsService);
+  private readonly router = inject(Router);
 
   readonly doctors = this.service.adminDoctors;
   readonly loading = this.service.adminLoading;
@@ -51,11 +59,9 @@ export class DoctorsAdminPage implements OnInit {
     { key: 'phone', label: 'رقم الهاتف' },
     { key: 'mobile', label: 'الجوال' },
     { key: 'whatsapp', label: 'واتساب' },
-    { key: 'email', label: 'البريد الإلكتروني' },
     { key: 'experienceYears', label: 'سنوات الخبرة', align: 'center' },
     { key: 'profileImage', label: 'صورة الملف' },
     { key: 'about', label: 'نبذة عن الطبيب' },
-    { key: 'interests', label: 'الاهتمامات' },
     {
       key: 'workingHours',
       label: 'ساعات العمل الأسبوعية',
@@ -67,15 +73,20 @@ export class DoctorsAdminPage implements OnInit {
   readonly results = computed(() => {
     const query = this.search().trim().toLowerCase();
 
-    return this.doctors().map(mapDoctor).filter(doctor =>
-      !query ||
+    const doctors = this.doctors().map(mapDoctor);
+
+    if (!query) {
+      return doctors;
+    }
+
+    return doctors.filter(doctor =>
       [
         doctor.name,
         doctor.specialty,
         doctor.area,
         doctor.governorate,
         doctor.phone ?? '',
-      ].some(value => value.toLowerCase().includes(query)),
+      ].some(value => value.toLocaleLowerCase().includes(query)),
     );
   });
 
@@ -88,16 +99,14 @@ export class DoctorsAdminPage implements OnInit {
   }
 
   addDoctor(): void {
-    // سنربطه بنموذج الإضافة في المرحلة التالية.
+    this.router.navigate(['/admin/doctors/create']);
   }
 
   editDoctor(doctor: Doctor): void {
-    // سنربطه بنموذج التعديل في المرحلة التالية.
     console.log('Edit doctor:', doctor.id);
   }
 
   deleteDoctor(doctor: Doctor): void {
-    // سنضيف تأكيد الحذف وربط API لاحقاً.
     console.log('Delete doctor:', doctor.id);
   }
 

@@ -15,6 +15,7 @@ import { initialsOf } from '../../../shared/utils/initials';
 const toDetails = (doctor: Doctor): ListingDetails => ({
   name: doctor.name,
   initials: initialsOf(doctor.name),
+  imageUrl: doctor.profileImage,
 
   subtitle: {
     label: doctor.specialty,

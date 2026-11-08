@@ -74,7 +74,13 @@ export const routes: Routes = [
         path: 'doctors',
         title: 'إدارة الأطباء',
         loadComponent: () =>
-          import('./features/admin/doctors/doctors-admin.page').then(m => m.DoctorsAdminPage),
+          import('./features/admin/doctors/pages/doctor-get/doctors-admin.page').then(m => m.DoctorsAdminPage),
+      },
+      {
+        path: 'doctors/create',
+        title: 'إضافة طبيب',
+        loadComponent: () =>
+          import('./features/admin/doctors/pages/doctor-form/doctor-form.component').then(m => m.DoctorFormComponent),
       },
       {
         path: 'centers',

@@ -18,10 +18,12 @@ export function mapDoctor(dto: DoctorApiDto): Doctor {
     phone: dto.phone,
     mobile: dto.mobile,
     whatsapp: dto.whatsapp,
+    email: dto.email ?? undefined,
 
     experienceYears: dto.experience_years,
     about: dto.about,
     profileImage: dto.profile_image,
+    interests: dto.interests ?? undefined,
     workingHours: mapWorkingHours(dto.workingHours ?? []),
   };
 }

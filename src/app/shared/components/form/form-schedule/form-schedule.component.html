@@ -1,0 +1,121 @@
+<div class="space-y-4">
+
+  @for (day of days; track day.key) {
+    <div class="rounded-xl border border-gray-200 p-4">
+
+      <div class="flex items-center justify-between gap-4">
+
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="isDayEnabled(day.key)"
+            [disabled]="disabled"
+            (click)="toggleDay(day.key)"
+            class="relative h-6 w-11 rounded-full transition-colors disabled:opacity-50"
+            [class.bg-brand]="isDayEnabled(day.key)"
+            [class.bg-gray-300]="!isDayEnabled(day.key)"
+          >
+            <span
+              class="absolute top-1 h-4 w-4 rounded-full bg-white transition-all"
+              [class.right-1]="isDayEnabled(day.key)"
+              [class.left-1]="!isDayEnabled(day.key)"
+            ></span>
+          </button>
+
+          <span class="font-semibold text-gray-800">
+            {{ day.label }}
+          </span>
+        </div>
+
+        @if (!isDayEnabled(day.key)) {
+          <span class="text-sm text-gray-400">مغلق</span>
+        } @else {
+          <span class="text-sm text-brand">مفتوح</span>
+        }
+
+      </div>
+
+      @if (isDayEnabled(day.key)) {
+        <div class="mt-4 space-y-3">
+
+          @for (period of schedule[day.key]; track $index; let i = $index) {
+            <div class="flex flex-wrap items-center gap-2">
+
+              <div class="flex flex-1 items-center gap-2">
+
+                <input
+                  type="time"
+                  [value]="getPeriodStart(period)"
+                  [disabled]="disabled"
+                  (change)="updatePeriod(
+                    day.key,
+                    i,
+                    'start',
+                    $any($event.target).value
+                  )"
+                  class="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand"
+                />
+
+                <span class="text-gray-400">إلى</span>
+
+                <input
+                  type="time"
+                  [value]="getPeriodEnd(period)"
+                  [disabled]="disabled"
+                  (change)="updatePeriod(
+                    day.key,
+                    i,
+                    'end',
+                    $any($event.target).value
+                  )"
+                  class="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand"
+                />
+
+              </div>
+
+              <button
+                type="button"
+                [disabled]="disabled"
+                (click)="removePeriod(day.key, i)"
+                class="rounded-lg p-2 text-red-500 hover:bg-red-50 disabled:opacity-50"
+                aria-label="حذف فترة الدوام"
+              >
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+
+              @if (isInvalidPeriod(period)) {
+                <p class="w-full text-xs text-red-500">
+                  وقت النهاية يجب أن يكون بعد وقت البداية.
+                </p>
+              }
+
+            </div>
+          }
+
+          <button
+            type="button"
+            [disabled]="disabled"
+            (click)="addPeriod(day.key)"
+            class="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline disabled:opacity-50"
+          >
+            <span class="material-symbols-outlined text-lg">add</span>
+            إضافة فترة دوام
+          </button>
+
+        </div>
+      }
+
+    </div>
+  }
+
+  <button
+    type="button"
+    [disabled]="disabled"
+    (click)="applySaturdayToAll()"
+    class="text-sm font-medium text-brand hover:underline disabled:opacity-50"
+  >
+    تطبيق دوام السبت على جميع الأيام
+  </button>
+
+</div>

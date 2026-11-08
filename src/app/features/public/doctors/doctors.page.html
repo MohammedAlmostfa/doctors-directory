@@ -27,6 +27,7 @@
           <app-place-card
             [place]="d"
             icon="medical_services"
+            [imageUrl]="d.profileImage"
             [tag]="d.specialty"
             [detailsLink]="'/doctors/' + d.id">
             @if (d.experienceYears !== null) {

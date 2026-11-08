@@ -12,7 +12,13 @@ import { ListingDetails } from '../../listing-details.model';
     <article class="card p-6 md:p-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div class="flex items-center gap-5">
-          @if (details().icon) {
+          @if (details().imageUrl; as image) {
+            <img
+              [src]="image"
+              [alt]="details().name"
+              class="h-20 w-20 shrink-0 rounded-xl border border-line-strong object-cover md:h-24 md:w-24"
+            />
+          } @else if (details().icon) {
             <span class="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-brand-soft text-brand flex items-center justify-center shrink-0" aria-hidden="true">
               <span class="icon text-[40px] md:text-[48px]">{{ details().icon }}</span>
             </span>

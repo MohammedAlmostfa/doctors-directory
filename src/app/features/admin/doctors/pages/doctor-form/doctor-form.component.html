@@ -1,0 +1,213 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="mx-auto max-w-[880px] space-y-6 pb-28"
+>
+
+  <!-- المعلومات الأساسية -->
+  <app-form-section
+    title="المعلومات الأساسية"
+    icon="person"
+  >
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+      <div class="md:col-span-2">
+        <app-form-field
+          label="اسم الطبيب"
+          id="name"
+          type="text"
+          placeholder="أدخل الاسم الكامل للطبيب"
+          [required]="true"
+          formControlName="name"
+        />
+
+      </div>
+
+      <app-form-field
+        label="الاختصاص"
+        id="specialty"
+        type="text"
+        placeholder="مثلاً: طب الأطفال"
+        [required]="true"
+        formControlName="specialty"
+      />
+
+      <app-form-field
+        label="سنوات الخبرة"
+        id="experienceYears"
+        type="number"
+        placeholder="عدد سنوات الخبرة"
+        formControlName="experienceYears"
+      />
+
+      <div class="md:col-span-2">
+        <app-form-photo-uploader
+          id="profileImage"
+          label="الصورة الشخصية"
+          hint="يفضل استخدام صورة واضحة بصيغة JPG أو PNG أو WebP."
+          formControlName="profileImage"
+        />
+      </div>
+
+    </div>
+
+  </app-form-section>
+
+
+  <!-- الموقع والعنوان -->
+  <app-form-section
+    title="الموقع والعنوان"
+    icon="location_on"
+  >
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+      <app-form-field
+        label="المحافظة"
+        id="governorate"
+        type="text"
+        placeholder="أدخل المحافظة"
+        [required]="true"
+        formControlName="governorate"
+      />
+
+      <app-form-field
+        label="المنطقة"
+        id="area"
+        type="text"
+        placeholder="أدخل المنطقة"
+        [required]="true"
+        formControlName="area"
+      />
+
+      <div class="md:col-span-2">
+        <app-form-field
+          label="العنوان التفصيلي"
+          id="address"
+          type="text"
+          placeholder="الشارع، البناء، الطابق..."
+          formControlName="address"
+        />
+      </div>
+
+      <div class="md:col-span-2">
+        <app-form-field
+          label="رابط الموقع على الخريطة"
+          id="mapUrl"
+          type="url"
+          placeholder="https://maps.google.com/..."
+          formControlName="mapUrl"
+        />
+      </div>
+
+    </div>
+
+  </app-form-section>
+
+
+  <!-- معلومات التواصل -->
+  <app-form-section
+    title="معلومات التواصل"
+    icon="call"
+  >
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+      <app-form-field
+        label="رقم الهاتف الأرضي"
+        id="phone"
+        type="tel"
+        placeholder="مثلاً: 011..."
+        formControlName="phone"
+      />
+
+      <app-form-field
+        label="رقم الموبايل"
+        id="mobile"
+        type="tel"
+        placeholder="09..."
+        formControlName="mobile"
+      />
+
+      <app-form-field
+        label="رقم واتساب"
+        id="whatsapp"
+        type="tel"
+        placeholder="09..."
+        formControlName="whatsapp"
+      />
+
+      <app-form-field
+        label="البريد الإلكتروني"
+        id="email"
+        type="email"
+        placeholder="doctor@example.com"
+        formControlName="email"
+      />
+
+    </div>
+
+  </app-form-section>
+
+
+  <!-- ساعات الدوام -->
+  <app-form-section
+    title="ساعات الدوام"
+    icon="schedule"
+  >
+
+    <p class="mb-4 text-sm text-gray-500">
+      حدد أيام العمل والفترات الزمنية التي يستقبل فيها الطبيب المرضى.
+      يمكنك إضافة أكثر من فترة في اليوم الواحد.
+    </p>
+
+    <app-form-schedule
+      formControlName="workingHours"
+    />
+
+  </app-form-section>
+
+
+  <!-- معلومات إضافية -->
+  <app-form-section
+    title="معلومات إضافية"
+    icon="description"
+  >
+
+    <div class="space-y-5">
+
+      <app-form-textarea
+        label="نبذة عن الطبيب"
+        id="about"
+        placeholder="اكتب نبذة مختصرة عن الطبيب وخبراته..."
+        [rows]="5"
+        [maxLength]="1000"
+        formControlName="about"
+      />
+
+      <app-form-textarea
+        label="الاهتمامات والخدمات"
+        id="interests"
+        placeholder="مثلاً: أمراض القلب، تخطيط القلب، ضغط الدم"
+        hint="افصل بين كل اهتمام وآخر بفاصلة."
+        [rows]="3"
+        formControlName="interests"
+      />
+
+    </div>
+
+  </app-form-section>
+
+
+  <!-- أزرار الإجراءات -->
+  <app-form-actions
+    [saving]="saving()"
+    [disabled]="form.invalid"
+    saveLabel="حفظ الطبيب"
+    cancelLabel="إلغاء"
+    (save)="onSubmit()"
+    (cancel)="onCancel()"
+  />
+
+</form>

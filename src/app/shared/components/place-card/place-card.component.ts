@@ -16,6 +16,7 @@ import { RouterLink } from '@angular/router';
 export class PlaceCardComponent {
   readonly place = input.required<PlaceBase>();
   readonly icon = input.required<string>();
+  readonly imageUrl = input<string | null>(null);
   readonly tag = input<string>('');
   readonly detailsLink = input<string | null>(null);
   private readonly clock = inject(ClockService);
